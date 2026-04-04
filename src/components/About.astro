@@ -1,0 +1,94 @@
+---
+// About / Why Us section with CTA
+
+const values = [
+  {
+    number: "01",
+    title: "You Come First",
+    description: "Your needs, your timeline, your budget — they're the blueprint for everything we do. No cookie-cutter solutions, just construction built around you.",
+  },
+  {
+    number: "02",
+    title: "Transparent Process",
+    description: "Weekly updates, real-time budget tracking, and open communication. You'll never wonder what's happening with your project.",
+  },
+  {
+    number: "03",
+    title: "Master Craftsmen",
+    description: "Our team of licensed professionals brings decades of combined experience. Every joint, every finish, every detail meets our exacting standards.",
+  },
+  {
+    number: "04",
+    title: "Built to Last",
+    description: "We use premium materials and proven construction methods. Your investment isn't just for today — it's for generations.",
+  },
+];
+---
+
+<section id="about" class="relative py-section-sm lg:py-section overflow-hidden">
+  <!-- Background accent -->
+  <div class="absolute top-0 left-0 w-1/3 h-full bg-limestone/50 hidden lg:block"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+      <!-- Left: Story -->
+      <div>
+        <p class="animate-on-scroll font-heading text-sm font-medium tracking-[0.3em] uppercase text-ember mb-4">
+          Why You First
+        </p>
+        <h2 class="animate-on-scroll font-display text-4xl lg:text-5xl text-charcoal-dark leading-[1.1] mb-6" style="animation-delay: 80ms;">
+          Building Trust <br/>Since Day One
+        </h2>
+        <span class="ember-line animate-on-scroll" style="animation-delay: 160ms;"></span>
+
+        <div class="mt-8 space-y-5 animate-on-scroll" style="animation-delay: 200ms;">
+          <p class="font-body text-lg text-slate leading-relaxed">
+            You First Construction was founded on a simple idea: the client should
+            always come first. Not the bottom line, not the schedule — <strong class="text-charcoal font-semibold">you.</strong>
+          </p>
+          <p class="font-body text-lg text-slate leading-relaxed">
+            Over 25 years, that philosophy has guided every nail, every beam, every
+            handshake. We've built more than 500 homes and earned a reputation that
+            speaks louder than any advertisement.
+          </p>
+          <p class="font-body text-lg text-slate leading-relaxed">
+            From our first conversation to your final walkthrough, you'll feel
+            the difference of working with a team that genuinely puts your needs
+            at the center of everything.
+          </p>
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-10 animate-on-scroll" style="animation-delay: 300ms;">
+          <a href="#contact" class="btn-primary font-heading text-sm font-semibold tracking-wider uppercase px-10 py-4 inline-block">
+            Let's Talk About Your Project
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Values -->
+      <div class="space-y-0">
+        {values.map((value, index) => (
+          <div
+            class="animate-on-scroll border-b border-limestone py-8 first:pt-0 group"
+            style={`animation-delay: ${index * 100 + 100}ms;`}
+          >
+            <div class="flex gap-6">
+              <span class="font-display text-3xl lg:text-4xl text-ember/20 group-hover:text-ember transition-colors duration-500 shrink-0">
+                {value.number}
+              </span>
+              <div>
+                <h3 class="font-heading text-lg font-semibold text-charcoal-dark mb-2 group-hover:text-ember transition-colors duration-300">
+                  {value.title}
+                </h3>
+                <p class="font-body text-base text-slate leading-relaxed">
+                  {value.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

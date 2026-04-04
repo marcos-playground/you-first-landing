@@ -1,0 +1,323 @@
+---
+import V3Layout from '../../../layouts/V3Layout.astro';
+
+const projects = [
+  {
+    title: 'Riverstone Estate',
+    category: 'Custom Home',
+    location: 'Sugar Land, TX',
+    sqft: '4,800',
+    desc: 'A sprawling luxury custom home featuring an open floor plan, chef\'s kitchen, and resort-style outdoor living.',
+    featured: true,
+  },
+  {
+    title: 'Heights Kitchen & Bath',
+    category: 'Remodel',
+    location: 'Houston Heights, TX',
+    sqft: '1,200',
+    desc: 'Complete kitchen and bathroom transformation with custom cabinetry and quartz countertops.',
+    featured: false,
+  },
+  {
+    title: 'Midtown Office Complex',
+    category: 'Commercial',
+    location: 'Midtown, Houston',
+    sqft: '12,000',
+    desc: 'A modern Class A office building with mixed-use retail space on the ground floor.',
+    featured: false,
+  },
+  {
+    title: 'Memorial Park Modern',
+    category: 'Custom Home',
+    location: 'Memorial, Houston',
+    sqft: '5,200',
+    desc: 'Contemporary design meets Texas warmth — floor-to-ceiling glass, natural stone, and smart home integration.',
+    featured: true,
+  },
+  {
+    title: 'Katy Family Home',
+    category: 'Spec Home',
+    location: 'Katy, TX',
+    sqft: '3,400',
+    desc: 'A move-in ready family home with premium finishes, energy-efficient systems, and a spacious backyard.',
+    featured: false,
+  },
+  {
+    title: 'Pearland Restoration',
+    category: 'Restoration',
+    location: 'Pearland, TX',
+    sqft: '2,800',
+    desc: 'Full property restoration after flood damage — rebuilt from studs with upgraded finishes and flood-resistant materials.',
+    featured: false,
+  },
+  {
+    title: 'Galleria Retail Build-Out',
+    category: 'Commercial',
+    location: 'Galleria Area, Houston',
+    sqft: '6,500',
+    desc: 'High-end retail tenant improvement with custom fixtures, lighting design, and branded environment.',
+    featured: false,
+  },
+  {
+    title: 'Woodlands Grand',
+    category: 'Custom Home',
+    location: 'The Woodlands, TX',
+    sqft: '6,100',
+    desc: 'Estate-level custom home with a wine cellar, home theater, pool house, and 4-car garage.',
+    featured: true,
+  },
+];
+
+const categories = ['All', 'Custom Home', 'Remodel', 'Commercial', 'Spec Home', 'Restoration'];
+---
+
+<V3Layout
+  title="Projects | You First Construction"
+  description="Explore our portfolio of custom homes, remodels, commercial builds, and restoration projects across the Houston area."
+  currentPage="projects"
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="v3-page-hero v3-bg-dark v3-texture">
+    <div class="v3-container">
+      <nav class="v3-breadcrumb v3-reveal" aria-label="Breadcrumb">
+        <a href="/v3">Home</a>
+        <span class="v3-breadcrumb-sep">/</span>
+        <span class="v3-breadcrumb-current">Projects</span>
+      </nav>
+      <div class="v3-badge v3-badge-light v3-reveal">Our Portfolio</div>
+      <h1 class="v3-display v3-display-xl v3-reveal v3-reveal-d1" style="margin-top: 1rem;">
+        Craftsmanship<br />you can see.
+      </h1>
+      <div class="v3-ember-bar v3-reveal v3-reveal-d2" style="margin-top: 1.25rem;"></div>
+      <p class="v3-text v3-reveal v3-reveal-d3" style="max-width: 520px; margin-top: 1rem;">
+        From custom estates to commercial complexes, every project tells a story of collaboration, quality, and attention to detail.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== FILTER + GRID ===================== -->
+  <section class="v3-section" style="padding-top: 3rem;">
+    <div class="v3-container">
+      <!-- Filter pills -->
+      <div class="v3-filter-bar v3-reveal">
+        {categories.map((cat) => (
+          <button
+            class:list={['v3-filter-pill', { 'is-active': cat === 'All' }]}
+            data-filter={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Project grid -->
+      <div class="v3-project-grid">
+        {projects.map((p, i) => (
+          <div
+            class:list={['v3-project-card', { 'is-featured': p.featured }, `v3-reveal v3-reveal-d${(i % 4) + 1}`]}
+            data-category={p.category}
+          >
+            <div class="v3-proj-img-wrap">
+              <div class="v3-img-placeholder" role="img" aria-label={p.title}></div>
+              <div class="v3-proj-badge-wrap">
+                <span class="v3-proj-cat">{p.category}</span>
+              </div>
+            </div>
+            <div class="v3-proj-info">
+              <h3 class="v3-proj-title">{p.title}</h3>
+              <p class="v3-proj-desc">{p.desc}</p>
+              <div class="v3-proj-meta">
+                <span>{p.location}</span>
+                <span class="v3-proj-dot"></span>
+                <span>{p.sqft} sq ft</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BAND ===================== -->
+  <section class="v3-cta-band">
+    <div class="v3-container v3-reveal">
+      <div class="v3-cta-content">
+        <h2 class="v3-display v3-display-lg" style="color: white;">
+          Have a project in mind?
+        </h2>
+        <p class="v3-cta-desc">
+          We would love to hear about it. Reach out for a free consultation and let us explore what is possible together.
+        </p>
+      </div>
+      <div class="v3-cta-actions">
+        <a href="/v3/contact" class="v3-btn v3-btn-white">Start the Conversation</a>
+        <a href="tel:5550123456" class="v3-cta-phone">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          (555) 012-3456
+        </a>
+      </div>
+    </div>
+  </section>
+</V3Layout>
+
+<style>
+  /* ===================== FILTER BAR ===================== */
+  .v3-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .v3-filter-pill {
+    font-family: var(--v3-font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--v3-charcoal-light);
+    background: rgba(42, 42, 42, 0.05);
+    border: 1px solid rgba(42, 42, 42, 0.08);
+    border-radius: var(--v3-radius);
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.25s var(--v3-ease);
+  }
+
+  .v3-filter-pill:hover {
+    background: rgba(42, 42, 42, 0.1);
+    color: var(--v3-charcoal);
+  }
+
+  .v3-filter-pill.is-active {
+    color: white;
+    background: var(--v3-ember);
+    border-color: var(--v3-ember);
+    font-weight: 700;
+  }
+
+  /* ===================== PROJECT GRID ===================== */
+  .v3-project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .v3-project-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 960px) {
+    .v3-project-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .v3-project-card.is-featured { grid-column: span 2; }
+  }
+
+  .v3-project-card {
+    border-radius: var(--v3-radius-lg);
+    overflow: hidden;
+    background: white;
+    border: 1px solid rgba(42, 42, 42, 0.1);
+    transition: transform 0.4s var(--v3-ease), box-shadow 0.4s, border-color 0.3s;
+  }
+
+  .v3-project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px -8px rgba(42, 42, 42, 0.12);
+    border-color: rgba(232, 97, 26, 0.2);
+  }
+
+  .v3-proj-img-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .v3-proj-img-wrap .v3-img-placeholder {
+    aspect-ratio: 16 / 10;
+    transition: transform 0.6s var(--v3-ease);
+  }
+
+  .v3-project-card.is-featured .v3-proj-img-wrap .v3-img-placeholder {
+    aspect-ratio: 16 / 9;
+  }
+
+  .v3-project-card:hover .v3-img-placeholder {
+    transform: scale(1.04);
+  }
+
+  .v3-proj-badge-wrap {
+    position: absolute;
+    top: 0.875rem;
+    left: 0.875rem;
+  }
+
+  .v3-proj-cat {
+    font-family: var(--v3-font-body);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: white;
+    background: rgba(42, 42, 42, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.35rem 0.875rem;
+    border-radius: var(--v3-radius);
+  }
+
+  .v3-proj-info {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .v3-proj-title {
+    font-family: var(--v3-font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--v3-charcoal);
+    margin-bottom: 0.375rem;
+  }
+
+  .v3-proj-desc {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--v3-charcoal-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .v3-proj-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--v3-font-body);
+    font-size: 0.8125rem;
+    color: var(--v3-stone);
+    font-weight: 500;
+  }
+
+  .v3-proj-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--v3-sand);
+  }
+</style>
+
+<script>
+  const pills = document.querySelectorAll('.v3-filter-pill');
+  const cards = document.querySelectorAll('.v3-project-card');
+
+  pills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      pills.forEach((p) => p.classList.remove('is-active'));
+      pill.classList.add('is-active');
+
+      const filter = pill.getAttribute('data-filter');
+
+      cards.forEach((card) => {
+        const cat = card.getAttribute('data-category');
+        if (filter === 'All' || cat === filter) {
+          (card as HTMLElement).style.display = '';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

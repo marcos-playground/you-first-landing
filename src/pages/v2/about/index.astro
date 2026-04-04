@@ -1,0 +1,370 @@
+---
+import V2Layout from '../../../layouts/V2Layout.astro';
+
+const values = [
+  { num: "I", title: "You Come First", desc: "Every decision starts with your priorities. We listen before we build. Your timeline, your budget, your vision." },
+  { num: "II", title: "Radical Transparency", desc: "Open books, real-time updates, honest conversations. No hidden costs, no surprises — just clarity at every stage." },
+  { num: "III", title: "Master Craftsmanship", desc: "We don't cut corners. Decades of hands-on expertise in every joint, every finish, every detail that matters." },
+  { num: "IV", title: "Built to Last", desc: "Quality materials, proven methods, and structural integrity that stands the test of time." },
+];
+
+const timeline = [
+  { year: "1999", event: "Founded in Los Angeles with a two-person crew and a commitment to doing things differently." },
+  { year: "2005", event: "Expanded into commercial construction, completing our first 10,000+ sq ft office build." },
+  { year: "2012", event: "Launched our high-end remodeling division, serving luxury residential clients across Southern California." },
+  { year: "2018", event: "Added disaster restoration services after helping neighbors rebuild following the Woolsey Fire." },
+  { year: "2024", event: "500+ projects completed. Same values. Same promise. Bigger team, broader capabilities." },
+];
+---
+
+<V2Layout title="About Us | You First Construction" currentPage="about">
+
+  <!-- Page header -->
+  <div class="v2-page-header">
+    <div class="v2-page-header__inner">
+      <div class="v2-page-header__crumb">
+        <a href="/v2" style="color:var(--color-steel); text-decoration:none;">Home</a>
+        <span>/</span>
+        About
+      </div>
+      <h1>Building Trust Since <span style="color:var(--color-ember)">1999</span></h1>
+      <p>We didn't start this company to be the biggest builder. We started it to be the one people trust most.</p>
+    </div>
+  </div>
+
+  <!-- Story section: Split -->
+  <section class="v2-about-story">
+    <div class="v2-about-story__text">
+      <span class="v2-bar"></span>
+      <h2>Our Story</h2>
+      <p>
+        Founded in 1999 by a father-and-son team in Los Angeles, You First Construction began with a simple
+        conviction: the best buildings come from putting people first. What started as a two-person operation
+        has grown into a full-service construction company with dozens of skilled professionals.
+      </p>
+      <p>
+        But our core philosophy hasn't changed. We still answer every call. We still walk every jobsite.
+        We still believe that the measure of a builder isn't just what they construct — it's how they treat
+        the people they build for.
+      </p>
+      <p>
+        Over 25 years, we've delivered more than 500 projects across residential and commercial sectors.
+        From custom dream homes to large-scale commercial developments, from high-end renovations to
+        critical disaster recovery — every project receives the same uncompromising commitment.
+      </p>
+    </div>
+    <div class="v2-about-story__visual">
+      <div class="v2-img-placeholder v2-about-story__img"></div>
+      <div class="v2-about-story__quote">
+        <blockquote>"Your vision is our blueprint."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <hr class="v2-hr" style="max-width:1440px; margin:0 auto;" />
+
+  <!-- Mission & Vision -->
+  <section class="v2-section">
+    <div class="v2-mv-grid">
+      <div class="v2-mv-card">
+        <div class="v2-mv-card__marker"></div>
+        <h3>Mission</h3>
+        <p>
+          To deliver construction excellence that prioritizes our clients' vision, timeline, and budget
+          — building relationships as strong as the structures we create. Every project, big or small,
+          receives the same standard of care.
+        </p>
+      </div>
+      <div class="v2-mv-card v2-mv-card--vision">
+        <div class="v2-mv-card__marker v2-mv-card__marker--outline"></div>
+        <h3>Vision</h3>
+        <p>
+          To be the most trusted name in construction — known for integrity, craftsmanship, and the
+          unwavering belief that every client deserves to come first. We're building toward a future
+          where quality and trust are the industry standard, not the exception.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="v2-values-section">
+    <div class="v2-values-section__inner">
+      <span class="v2-bar" style="background:white;"></span>
+      <h2>Our Values</h2>
+      <div class="v2-values-grid">
+        {values.map((v) => (
+          <div class="v2-value">
+            <span class="v2-value__num">{v.num}</span>
+            <h4>{v.title}</h4>
+            <p>{v.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="v2-section">
+    <span class="v2-bar"></span>
+    <h2 style="font-family:var(--font-display); font-size:clamp(2rem,4vw,3rem); line-height:1; margin:1.25rem 0 3rem;">25 Years of Building</h2>
+    <div class="v2-timeline">
+      {timeline.map((item) => (
+        <div class="v2-timeline__item">
+          <span class="v2-timeline__year">{item.year}</span>
+          <div class="v2-timeline__dot"></div>
+          <p class="v2-timeline__text">{item.event}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="v2-stats-band">
+    <div class="v2-stats-band__inner">
+      <div class="v2-stat"><div class="v2-stat__num">25+</div><div class="v2-stat__label">Years Experience</div></div>
+      <div class="v2-stat"><div class="v2-stat__num">500+</div><div class="v2-stat__label">Projects Delivered</div></div>
+      <div class="v2-stat"><div class="v2-stat__num">100%</div><div class="v2-stat__label">Client Satisfaction</div></div>
+      <div class="v2-stat"><div class="v2-stat__num">50+</div><div class="v2-stat__label">Team Members</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="v2-section" style="text-align:center;">
+    <span class="v2-bar" style="margin:0 auto;"></span>
+    <h2 style="font-family:var(--font-display); font-size:clamp(2rem,4vw,3.5rem); line-height:1; margin-top:1.25rem;">Work With Us</h2>
+    <p style="color:var(--color-slate); font-size:1.1rem; margin:1rem 0 2rem; max-width:480px; margin-left:auto; margin-right:auto;">
+      Ready to build something great? Let's talk about your project.
+    </p>
+    <a href="/v2/contact" class="v2-btn v2-btn--fill">
+      Contact Us
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+  </section>
+
+</V2Layout>
+
+<style>
+  /* Story split */
+  .v2-about-story {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 1024px) {
+    .v2-about-story { grid-template-columns: 1fr 1fr; }
+  }
+  .v2-about-story__text {
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  @media (min-width: 1024px) {
+    .v2-about-story__text { padding: 5rem 4rem 5rem 2rem; }
+  }
+  .v2-about-story__text h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    margin: 1.25rem 0 1.5rem;
+  }
+  .v2-about-story__text p {
+    font-size: 1rem;
+    color: var(--color-slate);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    max-width: 520px;
+  }
+  .v2-about-story__visual {
+    position: relative;
+  }
+  .v2-about-story__img {
+    min-height: 400px;
+    height: 100%;
+  }
+  .v2-about-story__quote {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+    background: var(--color-ember);
+    padding: 1.5rem 2rem;
+  }
+  .v2-about-story__quote blockquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: white;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  /* Mission / Vision */
+  .v2-mv-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  @media (min-width: 768px) {
+    .v2-mv-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .v2-mv-card {
+    border: 3px solid var(--color-charcoal-dark);
+    padding: 3rem;
+    background: var(--color-bone);
+  }
+  @media (min-width: 768px) {
+    .v2-mv-card:last-child { margin-left: -3px; }
+  }
+  @media (max-width: 767px) {
+    .v2-mv-card:last-child { margin-top: -3px; }
+  }
+  .v2-mv-card__marker {
+    width: 16px;
+    height: 16px;
+    background: var(--color-ember);
+    margin-bottom: 1.5rem;
+  }
+  .v2-mv-card__marker--outline {
+    background: transparent;
+    border: 3px solid var(--color-ember);
+  }
+  .v2-mv-card h3 {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-ember);
+    margin-bottom: 1rem;
+  }
+  .v2-mv-card p {
+    font-size: 1rem;
+    color: var(--color-slate);
+    line-height: 1.7;
+  }
+
+  /* Values */
+  .v2-values-section {
+    background: var(--color-charcoal-dark);
+    color: white;
+  }
+  .v2-values-section__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+  @media (min-width: 1024px) {
+    .v2-values-section__inner { padding: 7rem 2rem; }
+  }
+  .v2-values-section h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    margin: 1.25rem 0 3rem;
+  }
+  .v2-values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  @media (min-width: 768px) {
+    .v2-values-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .v2-values-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .v2-value {
+    padding: 2rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-top: -1px;
+    margin-left: -1px;
+    transition: background 0.3s ease;
+  }
+  .v2-value:hover { background: rgba(255,255,255,0.03); }
+  .v2-value__num {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--color-ember);
+    line-height: 1;
+    display: block;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+  .v2-value:hover .v2-value__num { opacity: 1; }
+  .v2-value h4 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .v2-value p {
+    font-size: 0.9rem;
+    color: var(--color-steel);
+    line-height: 1.6;
+  }
+
+  /* Timeline */
+  .v2-timeline {
+    position: relative;
+    padding-left: 2rem;
+    border-left: 3px solid var(--color-charcoal-dark);
+  }
+  .v2-timeline__item {
+    position: relative;
+    padding-bottom: 2.5rem;
+    padding-left: 2rem;
+  }
+  .v2-timeline__item:last-child { padding-bottom: 0; }
+  .v2-timeline__dot {
+    position: absolute;
+    left: -2rem;
+    top: 0.25rem;
+    width: 14px;
+    height: 14px;
+    background: var(--color-ember);
+    margin-left: -8.5px;
+  }
+  .v2-timeline__year {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--color-ember);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .v2-timeline__text {
+    font-size: 1rem;
+    color: var(--color-slate);
+    line-height: 1.6;
+    max-width: 600px;
+  }
+
+  /* Stats band */
+  .v2-stats-band {
+    background: var(--color-ember);
+    border-top: 3px solid var(--color-charcoal-dark);
+    border-bottom: 3px solid var(--color-charcoal-dark);
+  }
+  .v2-stats-band__inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  @media (min-width: 768px) {
+    .v2-stats-band__inner { grid-template-columns: repeat(4, 1fr); }
+  }
+  .v2-stats-band .v2-stat {
+    border-right: 1px solid rgba(255,255,255,0.2);
+    padding: 2.5rem 1rem;
+  }
+  .v2-stats-band .v2-stat:last-child { border-right: none; }
+  .v2-stats-band .v2-stat__num { color: white; }
+  .v2-stats-band .v2-stat__label { color: rgba(255,255,255,0.7); }
+</style>

@@ -1,26 +1,86 @@
 ---
-import '../styles/global.css';
-// Component Imports
-import Button from '../components/Button.astro';
-
-// Full Astro Component Syntax:
-// https://docs.astro.build/basics/astro-components/
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro + TailwindCSS</title>
-	</head>
+<Layout
+  title="Website Versions | You First Construction"
+  description="Browse multiple website iterations for You First Construction."
+>
+  <main class="min-h-screen bg-[linear-gradient(180deg,_#FAF9F7_0%,_#F5F3F0_45%,_#EDE9E3_100%)] px-6 py-16 lg:px-10">
+    <section class="mx-auto flex min-h-[calc(100vh-8rem)] max-w-6xl flex-col justify-center">
+      <div class="max-w-3xl space-y-6">
+        <p class="font-heading text-sm font-semibold tracking-[0.35em] text-charcoal-light uppercase">
+          Version Selector
+        </p>
+        <h1 class="font-display text-5xl leading-[0.95] text-charcoal sm:text-6xl lg:text-7xl">
+          Explore each website direction without route conflicts.
+        </h1>
+        <p class="max-w-2xl text-lg leading-relaxed text-charcoal-light sm:text-xl">
+          Each version now lives on its own URL so you can demo, compare, and keep iterating independently.
+        </p>
+      </div>
 
-	<body>
-		<div class="grid place-items-center h-screen content-center">
-			<Button>Tailwind Button in Astro!</Button>
-			<a href="/markdown-page" class="p-4 underline">Markdown is also supported...</a>
-		</div>
-	</body>
-</html>
+      <div class="mt-14 grid gap-6 lg:grid-cols-3">
+        <a href="/v1" class="group flex h-full flex-col rounded-[2rem] border border-charcoal/10 bg-white/90 p-8 shadow-[0_30px_80px_-35px_rgba(61,61,61,0.2)] transition-transform duration-500 hover:-translate-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="rounded-full bg-ember/10 px-4 py-2 font-heading text-xs font-semibold tracking-[0.25em] text-ember uppercase">
+              Current Design
+            </span>
+            <span class="font-heading text-sm font-semibold tracking-[0.2em] text-charcoal-light uppercase">
+              /v1
+            </span>
+          </div>
+          <h2 class="mt-8 font-display text-4xl text-charcoal">
+            Version 1
+          </h2>
+          <p class="mt-4 flex-1 text-lg leading-relaxed text-charcoal-light">
+            The existing implementation, preserved as the baseline for demos and comparisons.
+          </p>
+          <span class="mt-8 font-heading text-sm font-semibold tracking-[0.2em] text-charcoal uppercase transition-colors duration-300 group-hover:text-ember">
+            Open Version 1
+          </span>
+        </a>
+
+        <a href="/v2" class="group flex h-full flex-col rounded-[2rem] border border-charcoal/10 bg-white/75 p-8 shadow-[0_30px_80px_-35px_rgba(61,61,61,0.18)] transition-transform duration-500 hover:-translate-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="rounded-full bg-charcoal/6 px-4 py-2 font-heading text-xs font-semibold tracking-[0.25em] text-charcoal-light uppercase">
+              Reserved
+            </span>
+            <span class="font-heading text-sm font-semibold tracking-[0.2em] text-charcoal-light uppercase">
+              /v2
+            </span>
+          </div>
+          <h2 class="mt-8 font-display text-4xl text-charcoal">
+            Version 2
+          </h2>
+          <p class="mt-4 flex-1 text-lg leading-relaxed text-charcoal-light">
+            A clean placeholder route for your next iteration, ready to evolve separately from the current build.
+          </p>
+          <span class="mt-8 font-heading text-sm font-semibold tracking-[0.2em] text-charcoal uppercase transition-colors duration-300 group-hover:text-ember">
+            Open Version 2
+          </span>
+        </a>
+
+        <a href="/v3" class="group flex h-full flex-col rounded-[2rem] border border-charcoal/10 bg-charcoal p-8 text-white shadow-[0_30px_80px_-35px_rgba(61,61,61,0.35)] transition-transform duration-500 hover:-translate-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="rounded-full bg-white/10 px-4 py-2 font-heading text-xs font-semibold tracking-[0.25em] text-white/75 uppercase">
+              Exploration
+            </span>
+            <span class="font-heading text-sm font-semibold tracking-[0.2em] text-white/60 uppercase">
+              /v3
+            </span>
+          </div>
+          <h2 class="mt-8 font-display text-4xl text-white">
+            Version 3
+          </h2>
+          <p class="mt-4 flex-1 text-lg leading-relaxed text-white/75">
+            A third lane for a more distinct direction, isolated from the main experience and future V2 work.
+          </p>
+          <span class="mt-8 font-heading text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors duration-300 group-hover:text-ember-glow">
+            Open Version 3
+          </span>
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
