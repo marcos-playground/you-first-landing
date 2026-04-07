@@ -17,22 +17,30 @@ const previewUrl = {
     disable: "/api/preview/disable",
   },
 };
-const locations = Object.fromEntries(
-  previewPageRoutes.map((route) => [
-    route.documentType,
-    defineLocations({
-      select: { title: "seo.title" },
-      resolve: (doc) => ({
-        locations: [
-          {
-            title: doc?.title ?? route.title,
-            href: route.previewPathname,
-          },
-        ],
-      }),
+const locations = {
+  siteSettings: defineLocations({
+    select: { title: "_type" },
+    resolve: () => ({
+      locations: [{ title: "Site Settings", href: "/preview" }],
     }),
-  ]),
-);
+  }),
+  ...Object.fromEntries(
+    previewPageRoutes.map((route) => [
+      route.documentType,
+      defineLocations({
+        select: { title: "seo.title" },
+        resolve: (doc) => ({
+          locations: [
+            {
+              title: doc?.title ?? route.title,
+              href: route.previewPathname,
+            },
+          ],
+        }),
+      }),
+    ]),
+  ),
+};
 const mainDocuments = defineDocuments(
   previewPageRoutes.map((route) => ({
     route: route.previewPathname,

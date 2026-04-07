@@ -8,12 +8,22 @@ const pageDocuments = [
   { id: "contactPage", title: "Contact", schemaType: "contactPage" },
 ];
 
-export const singletonSchemaTypes = new Set(pageDocuments.map((page) => page.schemaType));
+const singletonDocuments = [
+  { id: "siteSettings", title: "Site Settings", schemaType: "siteSettings" },
+  ...pageDocuments,
+];
+
+export const singletonSchemaTypes = new Set(singletonDocuments.map((document) => document.schemaType));
 
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Content")
     .items([
+      S.listItem()
+        .id("siteSettings")
+        .title("Site Settings")
+        .child(S.document().schemaType("siteSettings").documentId("siteSettings").title("Site Settings")),
+      S.divider(),
       S.listItem()
         .title("Pages")
         .child(

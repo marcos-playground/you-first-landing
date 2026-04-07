@@ -18,8 +18,68 @@ export type SanityImage = {
   };
 };
 
+export type FooterLinkColumn = {
+  heading?: string;
+  links?: ButtonLink[];
+};
+
+export type SiteSettings = {
+  header?: {
+    logo?: SanityImage;
+    navLinks?: ButtonLink[];
+    cta?: ButtonLink;
+  };
+  footer?: {
+    logo?: SanityImage;
+    tagline?: string;
+    columns?: FooterLinkColumn[];
+    contactHeading?: string;
+    contactLines?: string[];
+    copyrightText?: string;
+  };
+};
+
 export const cmsImageFallbackSrc =
   "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
+export const defaultSiteSettings: SiteSettings = {
+  header: {
+    navLinks: [
+      { href: "/", label: "Home" },
+      { href: "/services", label: "Services" },
+      { href: "/projects", label: "Projects" },
+      { href: "/about", label: "About" },
+      { href: "/contact", label: "Contact" },
+    ],
+    cta: { href: "/contact", label: "Get a Quote" },
+  },
+  footer: {
+    tagline:
+      "Building dreams with integrity since 2000. From blueprints to move-in, we put you first.",
+    columns: [
+      {
+        heading: "Services",
+        links: [
+          { href: "/services", label: "New Construction" },
+          { href: "/services", label: "Remodeling" },
+          { href: "/services", label: "Commercial" },
+          { href: "/services", label: "Restoration" },
+        ],
+      },
+      {
+        heading: "Company",
+        links: [
+          { href: "/about", label: "Our Story" },
+          { href: "/projects", label: "Projects" },
+          { href: "/contact", label: "Contact" },
+        ],
+      },
+    ],
+    contactHeading: "Get in Touch",
+    contactLines: ["(555) 012-3456", "info@youfirstconstruction.com", "Houston, TX"],
+    copyrightText: "{year} You First Construction Inc. All rights reserved.",
+  },
+};
 
 export type PageHero = {
   badge?: string;
@@ -214,6 +274,23 @@ export type PageFetchOptions = {
 };
 
 const imageProjection = "..., asset->{url}";
+const siteSettingsQuery = `*[_type == "siteSettings" && _id == "siteSettings"][0]{
+  ...,
+  header{
+    ...,
+    logo{${imageProjection}},
+    navLinks[]{...},
+    cta{...}
+  },
+  footer{
+    ...,
+    logo{${imageProjection}},
+    columns[]{
+      ...,
+      links[]{...}
+    }
+  }
+}`;
 const pageQuery = `*[_type == $type && _id == $type][0]{
   ...,
   hero{
@@ -272,4 +349,38 @@ export async function getPage<T extends PageDocument>(
   }
 
   return page;
+}
+
+export async function getSiteSettings(
+  options: PageFetchOptions = {},
+): Promise<SiteSettings> {
+  const {
+    perspective = "published",
+    resultSourceMap = false,
+    stega = false,
+    token,
+    useCdn = false,
+  } = options;
+  const visualEditingEnabled = perspective === "drafts" || stega;
+
+  if (visualEditingEnabled && !token) {
+    throw new Error(
+      "The `SANITY_API_READ_TOKEN` environment variable is required during Visual Editing.",
+    );
+  }
+
+  const { result: settings } = await sanityClient.fetch<SiteSettings | null>(
+    siteSettingsQuery,
+    {},
+    {
+      filterResponse: false,
+      perspective,
+      resultSourceMap,
+      stega,
+      ...(visualEditingEnabled ? { token } : {}),
+      useCdn,
+    } satisfies QueryOptions,
+  );
+
+  return settings ?? defaultSiteSettings;
 }

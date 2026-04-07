@@ -2,6 +2,7 @@
 import { ClientRouter, fade } from 'astro:transitions';
 import { VisualEditing } from '@sanity/astro/visual-editing';
 import { toVisualEditingHref } from '../lib/previewRoutes';
+import { defaultSiteSettings, getSiteSettings } from '../lib/sanityPages';
 import '../styles/global.css';
 
 interface Props {
@@ -18,16 +19,52 @@ const {
   visualEditing = false,
 } = Astro.props;
 
-const navLinks = [
-  { href: '/', label: 'Home', page: 'home' },
-  { href: '/services', label: 'Services', page: 'services' },
-  { href: '/projects', label: 'Projects', page: 'projects' },
-  { href: '/about', label: 'About', page: 'about' },
-  { href: '/contact', label: 'Contact', page: 'contact' },
-];
-
 const currentYear = new Date().getFullYear();
 const previewHref = (href: string) => toVisualEditingHref(href, visualEditing);
+
+const siteSettings = await getSiteSettings({
+  perspective: visualEditing ? 'drafts' : 'published',
+  resultSourceMap: visualEditing ? 'withKeyArraySelector' : false,
+  stega: visualEditing,
+  token: visualEditing ? import.meta.env.SANITY_API_READ_TOKEN : undefined,
+  useCdn: false,
+});
+
+const defaultHeader = defaultSiteSettings.header!;
+const defaultFooter = defaultSiteSettings.footer!;
+const header = siteSettings.header ?? defaultHeader;
+const footer = siteSettings.footer ?? defaultFooter;
+const navLinks = header.navLinks?.length ? header.navLinks : defaultHeader.navLinks!;
+const headerCta = header.cta ?? defaultHeader.cta!;
+const footerColumns = footer.columns?.length ? footer.columns : defaultFooter.columns!;
+const footerContactLines = footer.contactLines?.length ? footer.contactLines : defaultFooter.contactLines!;
+const footerCopyright = (footer.copyrightText ?? defaultFooter.copyrightText!).replace(
+  '{year}',
+  String(currentYear),
+);
+const headerLogo = header.logo ?? {};
+const footerLogo = footer.logo ?? header.logo ?? {};
+
+function pageForHref(href: string): string | undefined {
+  if (!href.startsWith('/') || href.startsWith('//')) {
+    return undefined;
+  }
+
+  const pathname = href.split(/[?#]/)[0];
+  const publicPathname = pathname.startsWith('/preview')
+    ? pathname.replace(/^\/preview(?=\/|$)/, '') || '/'
+    : pathname;
+  const normalizedPathname = publicPathname !== '/' ? publicPathname.replace(/\/$/, '') : publicPathname;
+  const pageByPathname: Record<string, string> = {
+    '/': 'home',
+    '/services': 'services',
+    '/projects': 'projects',
+    '/about': 'about',
+    '/contact': 'contact',
+  };
+
+  return pageByPathname[normalizedPathname];
+}
 ---
 
 <html lang="en">
@@ -50,14 +87,18 @@ const previewHref = (href: string) => toVisualEditingHref(href, visualEditing);
     <header class="site-header" id="site-header" transition:animate="none">
       <div class="site-nav-bar">
         <a href={previewHref('/')} class="site-logo-link">
-          <img src="/logo.png" alt="You First Construction" class="site-logo-img" />
+          <img
+            src={headerLogo.asset?.url ?? '/logo.png'}
+            alt={headerLogo.alt ?? 'You First Construction'}
+            class="site-logo-img"
+          />
         </a>
 
         <nav class="site-nav-desktop" aria-label="Main navigation">
           {navLinks.map((link) => (
             <a
               href={previewHref(link.href)}
-              class:list={['site-nav-link', { 'is-active': currentPage === link.page }]}
+              class:list={['site-nav-link', { 'is-active': currentPage === pageForHref(link.href) }]}
             >
               {link.label}
             </a>
@@ -65,7 +106,7 @@ const previewHref = (href: string) => toVisualEditingHref(href, visualEditing);
         </nav>
 
         <div class="site-nav-actions">
-          <a href={previewHref('/contact')} class="site-nav-cta">Get a Quote</a>
+          <a href={previewHref(headerCta.href)} class="site-nav-cta">{headerCta.label}</a>
         </div>
 
         <button
@@ -87,7 +128,7 @@ const previewHref = (href: string) => toVisualEditingHref(href, visualEditing);
         {navLinks.map((link, i) => (
           <a
             href={previewHref(link.href)}
-            class:list={['site-mobile-link', { 'is-active': currentPage === link.page }]}
+            class:list={['site-mobile-link', { 'is-active': currentPage === pageForHref(link.href) }]}
             style={`transition-delay: ${0.05 + i * 0.06}s`}
           >
             <span class="site-mobile-link-num">0{i + 1}</span>
@@ -95,7 +136,7 @@ const previewHref = (href: string) => toVisualEditingHref(href, visualEditing);
           </a>
         ))}
         <div class="site-mobile-actions">
-          <a href={previewHref('/contact')} class="site-mobile-cta">Get a Quote</a>
+          <a href={previewHref(headerCta.href)} class="site-mobile-cta">{headerCta.label}</a>
         </div>
       </nav>
     </div>
@@ -111,39 +152,37 @@ const previewHref = (href: string) => toVisualEditingHref(href, visualEditing);
       <div class="site-footer-inner">
         <div class="site-footer-top">
           <div class="site-footer-brand">
-            <img src="/logo.png" alt="You First Construction" class="site-footer-logo" />
+            <img
+              src={footerLogo.asset?.url ?? '/logo.png'}
+              alt={footerLogo.alt ?? headerLogo.alt ?? 'You First Construction'}
+              class="site-footer-logo"
+            />
             <p class="site-footer-tagline">
-              Building dreams with integrity since 2000. From blueprints to move-in, we put you first.
+              {footer.tagline ?? defaultFooter.tagline}
             </p>
           </div>
 
           <div class="site-footer-cols">
-            <div class="site-footer-col">
-              <h4 class="site-footer-heading">Services</h4>
-              <a href={previewHref('/services')} class="site-footer-link">New Construction</a>
-              <a href={previewHref('/services')} class="site-footer-link">Remodeling</a>
-              <a href={previewHref('/services')} class="site-footer-link">Commercial</a>
-              <a href={previewHref('/services')} class="site-footer-link">Restoration</a>
-            </div>
+            {footerColumns.map((column) => (
+              <div class="site-footer-col">
+                {column.heading && <h4 class="site-footer-heading">{column.heading}</h4>}
+                {(column.links ?? []).map((link) => (
+                  <a href={previewHref(link.href)} class="site-footer-link">{link.label}</a>
+                ))}
+              </div>
+            ))}
 
             <div class="site-footer-col">
-              <h4 class="site-footer-heading">Company</h4>
-              <a href={previewHref('/about')} class="site-footer-link">Our Story</a>
-              <a href={previewHref('/projects')} class="site-footer-link">Projects</a>
-              <a href={previewHref('/contact')} class="site-footer-link">Contact</a>
-            </div>
-
-            <div class="site-footer-col">
-              <h4 class="site-footer-heading">Get in Touch</h4>
-              <p class="site-footer-info">(555) 012-3456</p>
-              <p class="site-footer-info">info@youfirstconstruction.com</p>
-              <p class="site-footer-info">Houston, TX</p>
+              <h4 class="site-footer-heading">{footer.contactHeading ?? defaultFooter.contactHeading}</h4>
+              {footerContactLines.map((line) => (
+                <p class="site-footer-info">{line}</p>
+              ))}
             </div>
           </div>
         </div>
 
         <div class="site-footer-bottom">
-          <p>&copy; {currentYear} You First Construction Inc. All rights reserved.</p>
+          <p>&copy; {footerCopyright}</p>
         </div>
       </div>
     </footer>

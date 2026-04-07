@@ -48,6 +48,13 @@ const previewPathnameByPublicPathname = new Map(
   previewPageRoutes.map((route) => [route.pathname, route.previewPathname]),
 );
 
+function parseInternalHref(href: string) {
+  const [, pathname = href, search = "", hash = ""] =
+    href.match(/^([^?#]*)(\?[^#]*)?(#.*)?$/) ?? [];
+
+  return { pathname, search, hash };
+}
+
 export function getPreviewRouteBySlug(slug?: string): PreviewPageRoute | undefined {
   const pathname = slug ? `/preview/${slug}` : "/preview";
   return previewPageRoutes.find((route) => route.previewPathname === pathname);
@@ -74,17 +81,18 @@ export function toVisualEditingHref(href: string, visualEditing: boolean): strin
     return href;
   }
 
-  const url = new URL(href, "https://you-first.local");
+  const { pathname, search, hash } = parseInternalHref(href);
 
-  if (url.pathname.startsWith("/preview")) {
-    return `${url.pathname}${url.search}${url.hash}`;
+  if (pathname.startsWith("/preview")) {
+    return `${pathname}${search}${hash}`;
   }
 
-  const previewPathname = previewPathnameByPublicPathname.get(url.pathname);
+  const normalizedPathname = pathname !== "/" ? pathname.replace(/\/$/, "") : pathname;
+  const previewPathname = previewPathnameByPublicPathname.get(normalizedPathname);
 
   if (!previewPathname) {
     return href;
   }
 
-  return `${previewPathname}${url.search}${url.hash}`;
+  return `${previewPathname}${search}${hash}`;
 }
