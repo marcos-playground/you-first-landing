@@ -44,6 +44,10 @@ export const previewPageRoutes: PreviewPageRoute[] = [
   },
 ];
 
+const previewPathnameByPublicPathname = new Map(
+  previewPageRoutes.map((route) => [route.pathname, route.previewPathname]),
+);
+
 export function getPreviewRouteBySlug(slug?: string): PreviewPageRoute | undefined {
   const pathname = slug ? `/preview/${slug}` : "/preview";
   return previewPageRoutes.find((route) => route.previewPathname === pathname);
@@ -63,4 +67,24 @@ export function toPreviewPathname(pathname: string): string {
   }
 
   return `/preview${pathname}`;
+}
+
+export function toVisualEditingHref(href: string, visualEditing: boolean): string {
+  if (!visualEditing || !href.startsWith("/") || href.startsWith("//")) {
+    return href;
+  }
+
+  const url = new URL(href, "https://you-first.local");
+
+  if (url.pathname.startsWith("/preview")) {
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  const previewPathname = previewPathnameByPublicPathname.get(url.pathname);
+
+  if (!previewPathname) {
+    return href;
+  }
+
+  return `${previewPathname}${url.search}${url.hash}`;
 }

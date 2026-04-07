@@ -1,6 +1,7 @@
 ---
 import { ClientRouter, fade } from 'astro:transitions';
 import { VisualEditing } from '@sanity/astro/visual-editing';
+import { toVisualEditingHref } from '../lib/previewRoutes';
 import '../styles/global.css';
 
 interface Props {
@@ -26,6 +27,7 @@ const navLinks = [
 ];
 
 const currentYear = new Date().getFullYear();
+const previewHref = (href: string) => toVisualEditingHref(href, visualEditing);
 ---
 
 <html lang="en">
@@ -47,14 +49,14 @@ const currentYear = new Date().getFullYear();
     <!-- Fixed Nav -->
     <header class="site-header" id="site-header" transition:animate="none">
       <div class="site-nav-bar">
-        <a href="/" class="site-logo-link">
+        <a href={previewHref('/')} class="site-logo-link">
           <img src="/logo.png" alt="You First Construction" class="site-logo-img" />
         </a>
 
         <nav class="site-nav-desktop" aria-label="Main navigation">
           {navLinks.map((link) => (
             <a
-              href={link.href}
+              href={previewHref(link.href)}
               class:list={['site-nav-link', { 'is-active': currentPage === link.page }]}
             >
               {link.label}
@@ -63,7 +65,7 @@ const currentYear = new Date().getFullYear();
         </nav>
 
         <div class="site-nav-actions">
-          <a href="/contact" class="site-nav-cta">Get a Quote</a>
+          <a href={previewHref('/contact')} class="site-nav-cta">Get a Quote</a>
         </div>
 
         <button
@@ -84,7 +86,7 @@ const currentYear = new Date().getFullYear();
       <nav class="site-mobile-nav" aria-label="Mobile navigation">
         {navLinks.map((link, i) => (
           <a
-            href={link.href}
+            href={previewHref(link.href)}
             class:list={['site-mobile-link', { 'is-active': currentPage === link.page }]}
             style={`transition-delay: ${0.05 + i * 0.06}s`}
           >
@@ -93,7 +95,7 @@ const currentYear = new Date().getFullYear();
           </a>
         ))}
         <div class="site-mobile-actions">
-          <a href="/contact" class="site-mobile-cta">Get a Quote</a>
+          <a href={previewHref('/contact')} class="site-mobile-cta">Get a Quote</a>
         </div>
       </nav>
     </div>
@@ -118,17 +120,17 @@ const currentYear = new Date().getFullYear();
           <div class="site-footer-cols">
             <div class="site-footer-col">
               <h4 class="site-footer-heading">Services</h4>
-              <a href="/services" class="site-footer-link">New Construction</a>
-              <a href="/services" class="site-footer-link">Remodeling</a>
-              <a href="/services" class="site-footer-link">Commercial</a>
-              <a href="/services" class="site-footer-link">Restoration</a>
+              <a href={previewHref('/services')} class="site-footer-link">New Construction</a>
+              <a href={previewHref('/services')} class="site-footer-link">Remodeling</a>
+              <a href={previewHref('/services')} class="site-footer-link">Commercial</a>
+              <a href={previewHref('/services')} class="site-footer-link">Restoration</a>
             </div>
 
             <div class="site-footer-col">
               <h4 class="site-footer-heading">Company</h4>
-              <a href="/about" class="site-footer-link">Our Story</a>
-              <a href="/projects" class="site-footer-link">Projects</a>
-              <a href="/contact" class="site-footer-link">Contact</a>
+              <a href={previewHref('/about')} class="site-footer-link">Our Story</a>
+              <a href={previewHref('/projects')} class="site-footer-link">Projects</a>
+              <a href={previewHref('/contact')} class="site-footer-link">Contact</a>
             </div>
 
             <div class="site-footer-col">
