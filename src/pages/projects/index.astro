@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { siteIcon } from '../../lib/icons';
-import { getPage, type CtaBlock, type PageDocument, type PageHero, type ProjectCard } from '../../lib/sanityPages';
+import { cmsImageFallbackSrc, getPage, type CtaBlock, type PageDocument, type PageHero, type ProjectCard } from '../../lib/sanityPages';
 
 type ProjectsPage = PageDocument & {
   hero: PageHero;
@@ -21,17 +21,31 @@ const page = await getPage<ProjectsPage>('projectsPage');
   <!-- ===================== HERO ===================== -->
   <section class="site-page-hero site-bg-dark site-texture">
     <div class="site-container">
-      <nav class="site-breadcrumb site-reveal" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="site-breadcrumb-sep">/</span>
-        <span class="site-breadcrumb-current">Projects</span>
-      </nav>
-      {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
-      <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
-        {page.hero.heading}
-      </h1>
-      <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
-      {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
+      <div class="site-page-hero-grid has-image">
+        <div>
+          <nav class="site-breadcrumb site-reveal" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span class="site-breadcrumb-sep">/</span>
+            <span class="site-breadcrumb-current">Projects</span>
+          </nav>
+          {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
+          <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
+            {page.hero.heading}
+          </h1>
+          <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
+          {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
+        </div>
+
+        <div class="site-page-hero-media site-reveal site-reveal-d2">
+          <img
+            src={page.hero.image?.asset?.url ?? cmsImageFallbackSrc}
+            alt={page.hero.image?.alt ?? ''}
+            class:list={['site-cms-image', { 'is-empty': !page.hero.image?.asset?.url }]}
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
     </div>
   </section>
 
@@ -58,7 +72,13 @@ const page = await getPage<ProjectsPage>('projectsPage');
             data-category={p.category}
           >
             <div class="site-proj-img-wrap">
-              <div class="site-img-placeholder" role="img" aria-label={p.title}></div>
+              <img
+                src={p.image?.asset?.url ?? cmsImageFallbackSrc}
+                alt={p.image?.alt ?? p.title}
+                class:list={['site-cms-image', { 'is-empty': !p.image?.asset?.url }]}
+                loading="lazy"
+                decoding="async"
+              />
               <div class="site-proj-badge-wrap">
                 <span class="site-proj-cat">{p.category}</span>
               </div>
@@ -169,16 +189,16 @@ const page = await getPage<ProjectsPage>('projectsPage');
     overflow: hidden;
   }
 
-  .site-proj-img-wrap .site-img-placeholder {
+  .site-proj-img-wrap .site-cms-image {
     aspect-ratio: 16 / 10;
     transition: transform 0.6s var(--site-ease);
   }
 
-  .site-project-card.is-featured .site-proj-img-wrap .site-img-placeholder {
+  .site-project-card.is-featured .site-proj-img-wrap .site-cms-image {
     aspect-ratio: 16 / 9;
   }
 
-  .site-project-card:hover .site-img-placeholder {
+  .site-project-card:hover .site-cms-image {
     transform: scale(1.04);
   }
 

@@ -806,10 +806,14 @@ const currentYear = new Date().getFullYear();
         overflow: hidden;
       }
 
-      /* Image placeholder with construction texture */
-      .site-img-placeholder {
+      .site-cms-image {
+        display: block;
         width: 100%;
         height: 100%;
+        object-fit: cover;
+      }
+
+      .site-cms-image.is-empty {
         background:
           repeating-linear-gradient(
             45deg,
@@ -819,16 +823,6 @@ const currentYear = new Date().getFullYear();
             rgba(42, 42, 42, 0.03) 21px
           ),
           linear-gradient(135deg, var(--site-sand) 0%, var(--site-stone) 100%);
-        position: relative;
-      }
-
-      .site-img-placeholder::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        opacity: 0.06;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        background-size: 200px;
       }
 
       /* Ember accent line */
@@ -882,6 +876,30 @@ const currentYear = new Date().getFullYear();
 
       @media (min-width: 768px) {
         .site-page-hero { padding: 11rem 2rem 5.5rem; }
+      }
+
+      .site-page-hero .site-container {
+        position: relative;
+        z-index: 1;
+      }
+
+      .site-page-hero-grid {
+        display: grid;
+        gap: 3rem;
+        align-items: center;
+      }
+
+      @media (min-width: 860px) {
+        .site-page-hero-grid.has-image {
+          grid-template-columns: 1.15fr 0.85fr;
+        }
+      }
+
+      .site-page-hero-media {
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        border-radius: var(--site-radius-lg);
+        border: 1px solid rgba(255, 255, 255, 0.06);
       }
 
       /* ============================================

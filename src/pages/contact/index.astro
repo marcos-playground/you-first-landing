@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { siteIcon } from '../../lib/icons';
-import { getPage, type ContactInfoCard, type FormOption, type PageDocument, type PageHero, type ServiceAreaItem } from '../../lib/sanityPages';
+import { cmsImageFallbackSrc, getPage, type ContactInfoCard, type FormOption, type PageDocument, type PageHero, type ServiceAreaItem } from '../../lib/sanityPages';
 
 type ContactPage = PageDocument & {
   hero: PageHero;
@@ -29,17 +29,31 @@ const page = await getPage<ContactPage>('contactPage');
   <!-- ===================== HERO ===================== -->
   <section class="site-page-hero site-bg-dark site-texture">
     <div class="site-container">
-      <nav class="site-breadcrumb site-reveal" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="site-breadcrumb-sep">/</span>
-        <span class="site-breadcrumb-current">Contact</span>
-      </nav>
-      {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
-      <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
-        {page.hero.heading}
-      </h1>
-      <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
-      {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
+      <div class="site-page-hero-grid has-image">
+        <div>
+          <nav class="site-breadcrumb site-reveal" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span class="site-breadcrumb-sep">/</span>
+            <span class="site-breadcrumb-current">Contact</span>
+          </nav>
+          {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
+          <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
+            {page.hero.heading}
+          </h1>
+          <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
+          {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
+        </div>
+
+        <div class="site-page-hero-media site-reveal site-reveal-d2">
+          <img
+            src={page.hero.image?.asset?.url ?? cmsImageFallbackSrc}
+            alt={page.hero.image?.alt ?? ''}
+            class:list={['site-cms-image', { 'is-empty': !page.hero.image?.asset?.url }]}
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
     </div>
   </section>
 

@@ -1,13 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { siteIcon } from '../lib/icons';
-import { getPage, type ButtonLink, type CtaBlock, type PageDocument, type ProjectCard, type ServiceCard, type StatItem, type ValueCard } from '../lib/sanityPages';
+import { cmsImageFallbackSrc, getPage, type ButtonLink, type CtaBlock, type PageDocument, type ProjectCard, type SanityImage, type ServiceCard, type StatItem, type ValueCard } from '../lib/sanityPages';
 
 type HomePage = PageDocument & {
   hero: {
     badge?: string;
     heading: string;
     text?: string;
+    image?: SanityImage;
     primaryButton?: ButtonLink;
     secondaryButton?: ButtonLink;
     stats?: StatItem[];
@@ -67,7 +68,13 @@ const page = await getPage<HomePage>('homePage');
       <!-- Hero image area -->
       <div class="site-hero-visual site-reveal site-reveal-d2">
         <div class="site-hero-img-wrap">
-          <div class="site-img-placeholder"></div>
+          <img
+            src={page.hero.image?.asset?.url ?? cmsImageFallbackSrc}
+            alt={page.hero.image?.alt ?? ''}
+            class:list={['site-cms-image', { 'is-empty': !page.hero.image?.asset?.url }]}
+            loading="eager"
+            decoding="async"
+          />
           <!-- Ember corner accent -->
           <div class="site-hero-corner"></div>
         </div>
@@ -131,7 +138,15 @@ const page = await getPage<HomePage>('homePage');
       <div class="site-projects-mosaic">
         {(page.work?.projects ?? []).map((project, i) => (
           <div class:list={['site-mosaic-item', { 'site-mosaic-wide': i === 0 }, `site-reveal site-reveal-d${i + 1}`]}>
-            <div class="site-mosaic-img"><div class="site-img-placeholder"></div></div>
+            <div class="site-mosaic-img">
+              <img
+                src={project.image?.asset?.url ?? cmsImageFallbackSrc}
+                alt={project.image?.alt ?? project.title}
+                class:list={['site-cms-image', { 'is-empty': !project.image?.asset?.url }]}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
             <div class="site-mosaic-info">
               <span class="site-mosaic-cat">{project.category}</span>
               <h3 class="site-mosaic-title">{project.title}</h3>
@@ -507,11 +522,11 @@ const page = await getPage<HomePage>('homePage');
     .site-mosaic-wide { min-height: 440px; }
   }
 
-  .site-mosaic-item .site-img-placeholder {
+  .site-mosaic-item .site-cms-image {
     transition: transform 0.6s var(--site-ease);
   }
 
-  .site-mosaic-item:hover .site-img-placeholder {
+  .site-mosaic-item:hover .site-cms-image {
     transform: scale(1.04);
   }
 

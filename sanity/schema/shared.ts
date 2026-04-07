@@ -62,6 +62,21 @@ export const sharedTypes = [
       defineField({ name: "badge", title: "Badge", type: "string" }),
       defineField({ name: "heading", title: "Heading", type: "string", validation: (Rule) => Rule.required() }),
       defineField({ name: "text", title: "Text", type: "text", rows: 3 }),
+      defineField({ name: "image", title: "Image", type: "siteImage" }),
+    ],
+  }),
+  defineType({
+    name: "siteImage",
+    title: "Image",
+    type: "image",
+    options: { hotspot: true },
+    fields: [
+      defineField({
+        name: "alt",
+        title: "Alt text",
+        type: "string",
+        description: "Describe the image for screen readers and SEO.",
+      }),
     ],
   }),
   defineType({
@@ -113,6 +128,7 @@ export const sharedTypes = [
       defineField({ name: "location", title: "Location", type: "string" }),
       defineField({ name: "sqft", title: "Square footage", type: "string" }),
       defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+      defineField({ name: "image", title: "Image", type: "siteImage" }),
       defineField({ name: "featured", title: "Featured layout", type: "boolean", initialValue: false }),
     ],
   }),

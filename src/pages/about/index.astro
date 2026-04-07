@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { siteIcon } from '../../lib/icons';
-import { getPage, type CtaBlock, type MilestoneItem, type PageDocument, type PageHero, type QuoteBlock, type StatItem, type TextSectionCard, type ValueCard } from '../../lib/sanityPages';
+import { cmsImageFallbackSrc, getPage, type CtaBlock, type MilestoneItem, type PageDocument, type PageHero, type QuoteBlock, type StatItem, type TextSectionCard, type ValueCard } from '../../lib/sanityPages';
 
 type AboutPage = PageDocument & {
   hero: PageHero;
@@ -50,7 +50,13 @@ const page = await getPage<AboutPage>('aboutPage');
 
         <div class="site-about-hero-img site-reveal site-reveal-d2">
           <div class="site-about-hero-img-inner">
-            <div class="site-img-placeholder"></div>
+            <img
+              src={page.hero.image?.asset?.url ?? cmsImageFallbackSrc}
+              alt={page.hero.image?.alt ?? ''}
+              class:list={['site-cms-image', { 'is-empty': !page.hero.image?.asset?.url }]}
+              loading="eager"
+              decoding="async"
+            />
           </div>
         </div>
       </div>

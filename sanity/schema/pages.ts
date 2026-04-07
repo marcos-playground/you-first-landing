@@ -20,6 +20,7 @@ export const pageTypes = [
           defineField({ name: "badge", title: "Badge", type: "string" }),
           defineField({ name: "heading", title: "Heading", type: "string", validation: (Rule) => Rule.required() }),
           defineField({ name: "text", title: "Text", type: "text", rows: 3 }),
+          defineField({ name: "image", title: "Image", type: "siteImage" }),
           defineField({ name: "primaryButton", title: "Primary button", type: "buttonLink" }),
           defineField({ name: "secondaryButton", title: "Secondary button", type: "buttonLink" }),
           defineField({ name: "stats", title: "Stats", type: "array", of: arrayOf("statItem") }),

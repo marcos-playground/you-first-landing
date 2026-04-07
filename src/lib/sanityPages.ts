@@ -10,10 +10,20 @@ export type StatItem = {
   label: string;
 };
 
+export type SanityImage = {
+  alt?: string;
+  asset?: {
+    url?: string;
+  };
+};
+
+export const cmsImageFallbackSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
 export type PageHero = {
   badge?: string;
   heading: string;
   text?: string;
+  image?: SanityImage;
 };
 
 export type CtaBlock = {
@@ -44,6 +54,7 @@ export type ProjectCard = {
   location?: string;
   sqft?: string;
   description?: string;
+  image?: SanityImage;
   featured?: boolean;
 };
 
@@ -96,9 +107,28 @@ export type PageDocument = {
   seo: Seo;
 };
 
+const imageProjection = "..., asset->{url}";
+
 export async function getPage<T extends PageDocument>(type: string): Promise<T> {
   const page = await sanityClient.fetch<T | null>(
-    `*[_type == $type && _id == $type][0]`,
+    `*[_type == $type && _id == $type][0]{
+      ...,
+      hero{
+        ...,
+        image{${imageProjection}}
+      },
+      work{
+        ...,
+        projects[]{
+          ...,
+          image{${imageProjection}}
+        }
+      },
+      projects[]{
+        ...,
+        image{${imageProjection}}
+      }
+    }`,
     { type },
     { perspective: "published" },
   );
