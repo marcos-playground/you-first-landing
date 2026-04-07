@@ -1,0 +1,75 @@
+---
+import AboutPageView from '../../components/pages/AboutPage.astro';
+import { urlSearchParamPreviewSecret, validatePreviewUrl } from '@sanity/preview-url-secret';
+import { sanityClient } from 'sanity:client';
+import ContactPageView from '../../components/pages/ContactPage.astro';
+import HomePageView from '../../components/pages/HomePage.astro';
+import ProjectsPageView from '../../components/pages/ProjectsPage.astro';
+import ServicesPageView from '../../components/pages/ServicesPage.astro';
+import { getPreviewRouteBySlug } from '../../lib/previewRoutes';
+import {
+  createPreviewSessionValue,
+  getPreviewSession,
+  setPreviewSessionCookie,
+} from '../../lib/previewSession';
+import { getPage } from '../../lib/sanityPages';
+
+export const prerender = false;
+
+const route = getPreviewRouteBySlug(Astro.params.slug);
+
+if (!route) {
+  return new Response('Preview page not found.', { status: 404 });
+}
+
+const token = import.meta.env.SANITY_API_READ_TOKEN;
+
+if (!token) {
+  return new Response('Missing SANITY_API_READ_TOKEN environment variable.', { status: 500 });
+}
+
+const previewSession = await getPreviewSession(Astro.cookies);
+
+if (!previewSession) {
+  const previewUrl = new URL(Astro.request.url);
+
+  if (!previewUrl.searchParams.has(urlSearchParamPreviewSecret)) {
+    return new Response('Open this preview from Sanity Studio.', { status: 401 });
+  }
+
+  const validation = await validatePreviewUrl(sanityClient.withConfig({ token }), Astro.request.url);
+
+  if (!validation.isValid) {
+    return new Response('Open this preview from Sanity Studio.', { status: 401 });
+  }
+
+  if (!import.meta.env.SANITY_PREVIEW_SESSION_SECRET) {
+    return new Response('Missing SANITY_PREVIEW_SESSION_SECRET environment variable.', { status: 500 });
+  }
+
+  const sessionValue = await createPreviewSessionValue({
+    perspective: validation.studioPreviewPerspective,
+    studioOrigin: validation.studioOrigin,
+  });
+  setPreviewSessionCookie(Astro.cookies, Astro.request, sessionValue);
+}
+
+const page = await getPage(route.documentType, {
+  perspective: 'drafts',
+  resultSourceMap: 'withKeyArraySelector',
+  stega: true,
+  token,
+  useCdn: false,
+});
+
+const pageViews = {
+  homePage: HomePageView,
+  servicesPage: ServicesPageView,
+  projectsPage: ProjectsPageView,
+  aboutPage: AboutPageView,
+  contactPage: ContactPageView,
+};
+const PageView = pageViews[route.documentType] as any;
+---
+
+<PageView page={page} visualEditing />

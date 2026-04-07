@@ -1,4 +1,5 @@
 import { sanityClient } from "sanity:client";
+import type { QueryOptions } from "@sanity/client";
 
 export type ButtonLink = {
   label: string;
@@ -17,7 +18,8 @@ export type SanityImage = {
   };
 };
 
-export const cmsImageFallbackSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+export const cmsImageFallbackSrc =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
 
 export type PageHero = {
   badge?: string;
@@ -107,30 +109,160 @@ export type PageDocument = {
   seo: Seo;
 };
 
-const imageProjection = "..., asset->{url}";
+export type HomePage = PageDocument & {
+  hero: {
+    badge?: string;
+    heading: string;
+    text?: string;
+    image?: SanityImage;
+    primaryButton?: ButtonLink;
+    secondaryButton?: ButtonLink;
+    stats?: StatItem[];
+  };
+  services?: {
+    badge?: string;
+    heading?: string;
+    text?: string;
+    button?: ButtonLink;
+    cards?: ServiceCard[];
+  };
+  work?: {
+    badge?: string;
+    heading?: string;
+    projects?: ProjectCard[];
+    button?: ButtonLink;
+  };
+  about?: {
+    badge?: string;
+    heading?: string;
+    text?: string;
+    secondaryText?: string;
+    button?: ButtonLink;
+    values?: ValueCard[];
+  };
+  cta?: CtaBlock;
+};
 
-export async function getPage<T extends PageDocument>(type: string): Promise<T> {
-  const page = await sanityClient.fetch<T | null>(
-    `*[_type == $type && _id == $type][0]{
+export type ServicesPage = PageDocument & {
+  hero: PageHero;
+  newConstruction?: {
+    label?: string;
+    heading?: string;
+    text?: string;
+    cards?: ServiceCard[];
+  };
+  remodeling?: {
+    label?: string;
+    heading?: string;
+    text?: string;
+    cards?: ServiceCard[];
+  };
+  process?: {
+    badge?: string;
+    heading?: string;
+    steps?: ProcessStep[];
+  };
+  cta?: CtaBlock;
+};
+
+export type ProjectsPage = PageDocument & {
+  hero: PageHero;
+  categories?: string[];
+  projects?: ProjectCard[];
+  cta?: CtaBlock;
+};
+
+export type AboutPage = PageDocument & {
+  hero: PageHero;
+  stats?: StatItem[];
+  missionVision?: TextSectionCard[];
+  values?: {
+    badge?: string;
+    heading?: string;
+    cards?: ValueCard[];
+  };
+  timeline?: {
+    badge?: string;
+    heading?: string;
+    milestones?: MilestoneItem[];
+  };
+  quote?: QuoteBlock;
+  cta?: CtaBlock;
+};
+
+export type ContactPage = PageDocument & {
+  hero: PageHero;
+  form?: {
+    heading?: string;
+    subheading?: string;
+    projectTypes?: FormOption[];
+    submitLabel?: string;
+  };
+  infoCards?: ContactInfoCard[];
+  serviceArea?: {
+    heading?: string;
+    areas?: ServiceAreaItem[];
+  };
+};
+
+export type PageFetchOptions = {
+  perspective?: "published" | "drafts";
+  resultSourceMap?: false | "withKeyArraySelector";
+  stega?: boolean;
+  token?: string;
+  useCdn?: boolean;
+};
+
+const imageProjection = "..., asset->{url}";
+const pageQuery = `*[_type == $type && _id == $type][0]{
+  ...,
+  hero{
+    ...,
+    image{${imageProjection}}
+  },
+  work{
+    ...,
+    projects[]{
       ...,
-      hero{
-        ...,
-        image{${imageProjection}}
-      },
-      work{
-        ...,
-        projects[]{
-          ...,
-          image{${imageProjection}}
-        }
-      },
-      projects[]{
-        ...,
-        image{${imageProjection}}
-      }
-    }`,
+      image{${imageProjection}}
+    }
+  },
+  projects[]{
+    ...,
+    image{${imageProjection}}
+  }
+}`;
+
+export async function getPage<T extends PageDocument>(
+  type: string,
+  options: PageFetchOptions = {},
+): Promise<T> {
+  const {
+    perspective = "published",
+    resultSourceMap = false,
+    stega = false,
+    token,
+    useCdn = false,
+  } = options;
+  const visualEditingEnabled = perspective === "drafts" || stega;
+
+  if (visualEditingEnabled && !token) {
+    throw new Error(
+      "The `SANITY_API_READ_TOKEN` environment variable is required during Visual Editing.",
+    );
+  }
+
+  const { result: page } = await sanityClient.fetch<T | null>(
+    pageQuery,
     { type },
-    { perspective: "published" },
+    {
+      filterResponse: false,
+      perspective,
+      resultSourceMap,
+      stega,
+      ...(visualEditingEnabled ? { token } : {}),
+      useCdn,
+    } satisfies QueryOptions,
   );
 
   if (!page) {
