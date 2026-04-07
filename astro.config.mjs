@@ -14,5 +14,15 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [react()], //sanity()],
+  integrations: [
+    react(),
+    sanity({
+      projectId: "wkc8eld4",
+      dataset: "production",
+
+      useCdn: false,
+      apiVersion: "2026-04-06",
+      studioBasePath: "/studio",
+    }),
+  ],
 });
