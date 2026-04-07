@@ -1,79 +1,21 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { siteIcon } from '../../lib/icons';
+import { getPage, type CtaBlock, type PageDocument, type PageHero, type ProjectCard } from '../../lib/sanityPages';
 
-const projects = [
-  {
-    title: 'Riverstone Estate',
-    category: 'Custom Home',
-    location: 'Sugar Land, TX',
-    sqft: '4,800',
-    desc: 'A sprawling luxury custom home featuring an open floor plan, chef\'s kitchen, and resort-style outdoor living.',
-    featured: true,
-  },
-  {
-    title: 'Heights Kitchen & Bath',
-    category: 'Remodel',
-    location: 'Houston Heights, TX',
-    sqft: '1,200',
-    desc: 'Complete kitchen and bathroom transformation with custom cabinetry and quartz countertops.',
-    featured: false,
-  },
-  {
-    title: 'Midtown Office Complex',
-    category: 'Commercial',
-    location: 'Midtown, Houston',
-    sqft: '12,000',
-    desc: 'A modern Class A office building with mixed-use retail space on the ground floor.',
-    featured: false,
-  },
-  {
-    title: 'Memorial Park Modern',
-    category: 'Custom Home',
-    location: 'Memorial, Houston',
-    sqft: '5,200',
-    desc: 'Contemporary design meets Texas warmth — floor-to-ceiling glass, natural stone, and smart home integration.',
-    featured: true,
-  },
-  {
-    title: 'Katy Family Home',
-    category: 'Spec Home',
-    location: 'Katy, TX',
-    sqft: '3,400',
-    desc: 'A move-in ready family home with premium finishes, energy-efficient systems, and a spacious backyard.',
-    featured: false,
-  },
-  {
-    title: 'Pearland Restoration',
-    category: 'Restoration',
-    location: 'Pearland, TX',
-    sqft: '2,800',
-    desc: 'Full property restoration after flood damage — rebuilt from studs with upgraded finishes and flood-resistant materials.',
-    featured: false,
-  },
-  {
-    title: 'Galleria Retail Build-Out',
-    category: 'Commercial',
-    location: 'Galleria Area, Houston',
-    sqft: '6,500',
-    desc: 'High-end retail tenant improvement with custom fixtures, lighting design, and branded environment.',
-    featured: false,
-  },
-  {
-    title: 'Woodlands Grand',
-    category: 'Custom Home',
-    location: 'The Woodlands, TX',
-    sqft: '6,100',
-    desc: 'Estate-level custom home with a wine cellar, home theater, pool house, and 4-car garage.',
-    featured: true,
-  },
-];
+type ProjectsPage = PageDocument & {
+  hero: PageHero;
+  categories?: string[];
+  projects?: ProjectCard[];
+  cta?: CtaBlock;
+};
 
-const categories = ['All', 'Custom Home', 'Remodel', 'Commercial', 'Spec Home', 'Restoration'];
+const page = await getPage<ProjectsPage>('projectsPage');
 ---
 
 <Layout
-  title="Projects | You First Construction"
-  description="Explore our portfolio of custom homes, remodels, commercial builds, and restoration projects across the Houston area."
+  title={page.seo.title}
+  description={page.seo.description}
   currentPage="projects"
 >
   <!-- ===================== HERO ===================== -->
@@ -84,14 +26,12 @@ const categories = ['All', 'Custom Home', 'Remodel', 'Commercial', 'Spec Home', 
         <span class="site-breadcrumb-sep">/</span>
         <span class="site-breadcrumb-current">Projects</span>
       </nav>
-      <div class="site-badge site-badge-light site-reveal">Our Portfolio</div>
+      {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
       <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
-        Craftsmanship<br />you can see.
+        {page.hero.heading}
       </h1>
       <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
-      <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">
-        From custom estates to commercial complexes, every project tells a story of collaboration, quality, and attention to detail.
-      </p>
+      {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
     </div>
   </section>
 
@@ -100,7 +40,7 @@ const categories = ['All', 'Custom Home', 'Remodel', 'Commercial', 'Spec Home', 
     <div class="site-container">
       <!-- Filter pills -->
       <div class="site-filter-bar site-reveal">
-        {categories.map((cat) => (
+        {(page.categories ?? []).map((cat) => (
           <button
             class:list={['site-filter-pill', { 'is-active': cat === 'All' }]}
             data-filter={cat}
@@ -112,7 +52,7 @@ const categories = ['All', 'Custom Home', 'Remodel', 'Commercial', 'Spec Home', 
 
       <!-- Project grid -->
       <div class="site-project-grid">
-        {projects.map((p, i) => (
+        {(page.projects ?? []).map((p, i) => (
           <div
             class:list={['site-project-card', { 'is-featured': p.featured }, `site-reveal site-reveal-d${(i % 4) + 1}`]}
             data-category={p.category}
@@ -125,11 +65,11 @@ const categories = ['All', 'Custom Home', 'Remodel', 'Commercial', 'Spec Home', 
             </div>
             <div class="site-proj-info">
               <h3 class="site-proj-title">{p.title}</h3>
-              <p class="site-proj-desc">{p.desc}</p>
+              {p.description && <p class="site-proj-desc">{p.description}</p>}
               <div class="site-proj-meta">
-                <span>{p.location}</span>
-                <span class="site-proj-dot"></span>
-                <span>{p.sqft} sq ft</span>
+                {p.location && <span>{p.location}</span>}
+                {p.location && p.sqft && <span class="site-proj-dot"></span>}
+                {p.sqft && <span>{p.sqft} sq ft</span>}
               </div>
             </div>
           </div>
@@ -143,18 +83,18 @@ const categories = ['All', 'Custom Home', 'Remodel', 'Commercial', 'Spec Home', 
     <div class="site-container site-reveal">
       <div class="site-cta-content">
         <h2 class="site-display site-display-lg" style="color: white;">
-          Have a project in mind?
+          {page.cta?.heading}
         </h2>
-        <p class="site-cta-desc">
-          We would love to hear about it. Reach out for a free consultation and let us explore what is possible together.
-        </p>
+        {page.cta?.text && <p class="site-cta-desc">{page.cta.text}</p>}
       </div>
       <div class="site-cta-actions">
-        <a href="/contact" class="site-btn site-btn-white">Start the Conversation</a>
-        <a href="tel:5550123456" class="site-cta-phone">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          (555) 012-3456
-        </a>
+        {page.cta?.primaryButton && <a href={page.cta.primaryButton.href} class="site-btn site-btn-white">{page.cta.primaryButton.label}</a>}
+        {page.cta?.phoneHref && page.cta.phoneLabel && (
+          <a href={page.cta.phoneHref} class="site-cta-phone">
+            <span set:html={siteIcon('phone', 18)} />
+            {page.cta.phoneLabel}
+          </a>
+        )}
       </div>
     </div>
   </section>

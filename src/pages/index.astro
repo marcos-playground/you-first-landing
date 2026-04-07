@@ -1,31 +1,66 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { siteIcon } from '../lib/icons';
+import { getPage, type ButtonLink, type CtaBlock, type PageDocument, type ProjectCard, type ServiceCard, type StatItem, type ValueCard } from '../lib/sanityPages';
+
+type HomePage = PageDocument & {
+  hero: {
+    badge?: string;
+    heading: string;
+    text?: string;
+    primaryButton?: ButtonLink;
+    secondaryButton?: ButtonLink;
+    stats?: StatItem[];
+  };
+  services?: {
+    badge?: string;
+    heading?: string;
+    text?: string;
+    button?: ButtonLink;
+    cards?: ServiceCard[];
+  };
+  work?: {
+    badge?: string;
+    heading?: string;
+    projects?: ProjectCard[];
+    button?: ButtonLink;
+  };
+  about?: {
+    badge?: string;
+    heading?: string;
+    text?: string;
+    secondaryText?: string;
+    button?: ButtonLink;
+    values?: ValueCard[];
+  };
+  cta?: CtaBlock;
+};
+
+const page = await getPage<HomePage>('homePage');
 ---
 
 <Layout
-  title="You First Construction | Custom Home Builders in Houston"
-  description="Premium custom home construction, remodeling, and restoration. We put you first — from blueprint to move-in day."
+  title={page.seo.title}
+  description={page.seo.description}
   currentPage="home"
 >
   <!-- ===================== HERO — Full-bleed dark with ember accent ===================== -->
   <section class="site-hero site-texture">
     <div class="site-hero-inner">
       <div class="site-hero-content">
-        <div class="site-badge site-badge-light site-reveal">Houston's Trusted Builder</div>
+        {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
 
         <h1 class="site-display site-display-xl site-hero-heading site-reveal site-reveal-d1">
-          We build homes that put&nbsp;you&nbsp;first.
+          {page.hero.heading}
         </h1>
 
         <div class="site-ember-bar site-reveal site-reveal-d2"></div>
 
-        <p class="site-hero-desc site-reveal site-reveal-d3">
-          From custom homes and commercial builds to full-scale remodels and disaster recovery, You First Construction delivers quality craftsmanship with a personal touch.
-        </p>
+        {page.hero.text && <p class="site-hero-desc site-reveal site-reveal-d3">{page.hero.text}</p>}
 
         <div class="site-hero-actions site-reveal site-reveal-d4">
-          <a href="/contact" class="site-btn site-btn-primary">Start Your Project</a>
-          <a href="/projects" class="site-btn site-btn-outline-light">View Our Work</a>
+          {page.hero.primaryButton && <a href={page.hero.primaryButton.href} class="site-btn site-btn-primary">{page.hero.primaryButton.label}</a>}
+          {page.hero.secondaryButton && <a href={page.hero.secondaryButton.href} class="site-btn site-btn-outline-light">{page.hero.secondaryButton.label}</a>}
         </div>
       </div>
 
@@ -41,22 +76,12 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- Stats bar -->
     <div class="site-hero-stats site-reveal site-reveal-d5">
-      <div class="site-stat">
-        <span class="site-stat-num">25+</span>
-        <span class="site-stat-label">Years of Experience</span>
-      </div>
-      <div class="site-stat">
-        <span class="site-stat-num">500+</span>
-        <span class="site-stat-label">Projects Completed</span>
-      </div>
-      <div class="site-stat">
-        <span class="site-stat-num">100%</span>
-        <span class="site-stat-label">Client Satisfaction</span>
-      </div>
-      <div class="site-stat">
-        <span class="site-stat-num">60+</span>
-        <span class="site-stat-label">Team Members</span>
-      </div>
+      {(page.hero.stats ?? []).map((stat) => (
+        <div class="site-stat">
+          <span class="site-stat-num">{stat.value}</span>
+          <span class="site-stat-label">{stat.label}</span>
+        </div>
+      ))}
     </div>
   </section>
 
@@ -65,57 +90,30 @@ import Layout from '../layouts/Layout.astro';
     <div class="site-container">
       <div class="site-split-header">
         <div>
-          <div class="site-badge site-reveal">What We Do</div>
+          {page.services?.badge && <div class="site-badge site-reveal">{page.services.badge}</div>}
           <h2 class="site-display site-display-lg site-reveal site-reveal-d1" style="margin-top: 1rem;">
-            Full-spectrum<br />construction services.
+            {page.services?.heading}
           </h2>
         </div>
         <div class="site-reveal site-reveal-d2">
-          <p class="site-text">
-            Whether you're dreaming of a new custom home or revitalizing an existing space, we bring decades of expertise and genuine care to every project.
-          </p>
-          <div style="margin-top: 1.5rem;">
-            <a href="/services" class="site-btn site-btn-outline">Explore All Services</a>
-          </div>
+          {page.services?.text && <p class="site-text">{page.services.text}</p>}
+          {page.services?.button && (
+            <div style="margin-top: 1.5rem;">
+              <a href={page.services.button.href} class="site-btn site-btn-outline">{page.services.button.label}</a>
+            </div>
+          )}
         </div>
       </div>
 
       <div class="site-services-grid">
-        <a href="/services" class="site-svc-card site-reveal site-reveal-d1">
-          <div class="site-svc-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2L1 12h3v13h8v-7h4v7h8V12h3L14 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 class="site-svc-title">New Construction</h3>
-          <p class="site-svc-desc">Custom homes, spec builds, commercial projects, and shell construction from the ground up.</p>
-          <span class="site-svc-link">Learn more &rarr;</span>
-        </a>
-
-        <a href="/services" class="site-svc-card site-reveal site-reveal-d2">
-          <div class="site-svc-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M18 5l5 5-13 13H5v-5L18 5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          <h3 class="site-svc-title">Remodeling</h3>
-          <p class="site-svc-desc">Residential and commercial transformations, from high-end renovations to complete overhauls.</p>
-          <span class="site-svc-link">Learn more &rarr;</span>
-        </a>
-
-        <a href="/services" class="site-svc-card site-reveal site-reveal-d3">
-          <div class="site-svc-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 26V10l10-7 10 7v16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 26h20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="14" cy="16" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
-          </div>
-          <h3 class="site-svc-title">Restoration</h3>
-          <p class="site-svc-desc">Disaster recovery and property restoration — rebuilding what matters when you need it most.</p>
-          <span class="site-svc-link">Learn more &rarr;</span>
-        </a>
-
-        <a href="/services" class="site-svc-card site-reveal site-reveal-d4">
-          <div class="site-svc-icon-wrap">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="6" width="22" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 6V3h10v3M9 14h3m4 0h3M9 20h3m4 0h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          <h3 class="site-svc-title">Commercial</h3>
-          <p class="site-svc-desc">Office, retail, and mixed-use projects delivered on time and on budget with commercial-grade quality.</p>
-          <span class="site-svc-link">Learn more &rarr;</span>
-        </a>
+        {(page.services?.cards ?? []).map((svc, i) => (
+          <a href={svc.href ?? '/services'} class={`site-svc-card site-reveal site-reveal-d${i + 1}`}>
+            <div class="site-svc-icon-wrap" set:html={siteIcon(svc.iconKey)} />
+            <h3 class="site-svc-title">{svc.title}</h3>
+            {svc.description && <p class="site-svc-desc">{svc.description}</p>}
+            {svc.linkLabel && <span class="site-svc-link">{svc.linkLabel} &rarr;</span>}
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -124,40 +122,34 @@ import Layout from '../layouts/Layout.astro';
   <section class="site-section site-bg-dark site-texture">
     <div class="site-container">
       <div class="site-section-header-center site-reveal">
-        <div class="site-badge site-badge-light">Our Work</div>
+        {page.work?.badge && <div class="site-badge site-badge-light">{page.work.badge}</div>}
         <h2 class="site-display site-display-lg" style="margin-top: 1rem;">
-          Craftsmanship you can see.
+          {page.work?.heading}
         </h2>
       </div>
 
       <div class="site-projects-mosaic">
-        <div class="site-mosaic-item site-mosaic-wide site-reveal site-reveal-d1">
-          <div class="site-mosaic-img"><div class="site-img-placeholder"></div></div>
-          <div class="site-mosaic-info">
-            <span class="site-mosaic-cat">Custom Home</span>
-            <h3 class="site-mosaic-title">Riverstone Estate</h3>
-            <span class="site-mosaic-meta">Sugar Land, TX &mdash; 4,800 sq ft</span>
+        {(page.work?.projects ?? []).map((project, i) => (
+          <div class:list={['site-mosaic-item', { 'site-mosaic-wide': i === 0 }, `site-reveal site-reveal-d${i + 1}`]}>
+            <div class="site-mosaic-img"><div class="site-img-placeholder"></div></div>
+            <div class="site-mosaic-info">
+              <span class="site-mosaic-cat">{project.category}</span>
+              <h3 class="site-mosaic-title">{project.title}</h3>
+              {(project.location || project.sqft) && (
+                <span class="site-mosaic-meta">
+                  {[project.location, project.sqft ? `${project.sqft} sq ft` : undefined].filter(Boolean).join(' — ')}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        <div class="site-mosaic-item site-reveal site-reveal-d2">
-          <div class="site-mosaic-img"><div class="site-img-placeholder"></div></div>
-          <div class="site-mosaic-info">
-            <span class="site-mosaic-cat">Remodel</span>
-            <h3 class="site-mosaic-title">Heights Kitchen Renovation</h3>
-          </div>
-        </div>
-        <div class="site-mosaic-item site-reveal site-reveal-d3">
-          <div class="site-mosaic-img"><div class="site-img-placeholder"></div></div>
-          <div class="site-mosaic-info">
-            <span class="site-mosaic-cat">Commercial</span>
-            <h3 class="site-mosaic-title">Midtown Office Complex</h3>
-          </div>
-        </div>
+        ))}
       </div>
 
-      <div style="text-align: center; margin-top: 3rem;" class="site-reveal site-reveal-d4">
-        <a href="/projects" class="site-btn site-btn-primary">View All Projects</a>
-      </div>
+      {page.work?.button && (
+        <div style="text-align: center; margin-top: 3rem;" class="site-reveal site-reveal-d4">
+          <a href={page.work.button.href} class="site-btn site-btn-primary">{page.work.button.label}</a>
+        </div>
+      )}
     </div>
   </section>
 
@@ -166,45 +158,31 @@ import Layout from '../layouts/Layout.astro';
     <div class="site-container">
       <div class="site-about-split">
         <div class="site-about-left site-reveal">
-          <div class="site-badge">About Us</div>
+          {page.about?.badge && <div class="site-badge">{page.about.badge}</div>}
           <h2 class="site-display site-display-lg" style="margin-top: 1rem;">
-            Built on trust.<br />Driven by quality.
+            {page.about?.heading}
           </h2>
           <div class="site-ember-bar" style="margin-top: 1.25rem;"></div>
-          <p class="site-text" style="margin-top: 1.25rem;">
-            For over two decades, You First Construction has been the name Houston homeowners and businesses trust for quality craftsmanship and transparent communication.
-          </p>
-          <p class="site-text" style="margin-top: 0.75rem;">
-            We don't just build structures — we build relationships that last.
-          </p>
-          <div style="margin-top: 2rem;">
-            <a href="/about" class="site-btn site-btn-dark">Our Story</a>
-          </div>
+          {page.about?.text && <p class="site-text" style="margin-top: 1.25rem;">{page.about.text}</p>}
+          {page.about?.secondaryText && <p class="site-text" style="margin-top: 0.75rem;">{page.about.secondaryText}</p>}
+          {page.about?.button && (
+            <div style="margin-top: 2rem;">
+              <a href={page.about.button.href} class="site-btn site-btn-dark">{page.about.button.label}</a>
+            </div>
+          )}
         </div>
 
         <div class="site-about-right">
           <div class="site-about-values-stack">
-            <div class="site-val-item site-card site-reveal site-reveal-d1">
-              <div class="site-val-num">01</div>
-              <div>
-                <h4 class="site-val-title">Integrity First</h4>
-                <p class="site-val-desc">Honest communication, transparent pricing, and promises kept — every single time.</p>
+            {(page.about?.values ?? []).map((value, i) => (
+              <div class={`site-val-item site-card site-reveal site-reveal-d${i + 1}`}>
+                {value.num && <div class="site-val-num">{value.num}</div>}
+                <div>
+                  <h4 class="site-val-title">{value.title}</h4>
+                  {value.description && <p class="site-val-desc">{value.description}</p>}
+                </div>
               </div>
-            </div>
-            <div class="site-val-item site-card site-reveal site-reveal-d2">
-              <div class="site-val-num">02</div>
-              <div>
-                <h4 class="site-val-title">Expert Craftsmanship</h4>
-                <p class="site-val-desc">Every detail matters — from foundation to finish, we never cut corners.</p>
-              </div>
-            </div>
-            <div class="site-val-item site-card site-reveal site-reveal-d3">
-              <div class="site-val-num">03</div>
-              <div>
-                <h4 class="site-val-title">True Partnership</h4>
-                <p class="site-val-desc">Your vision drives our work. We collaborate closely from first sketch to final walkthrough.</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -216,18 +194,18 @@ import Layout from '../layouts/Layout.astro';
     <div class="site-container site-reveal">
       <div class="site-cta-content">
         <h2 class="site-display site-display-lg" style="color: white;">
-          Ready to start building?
+          {page.cta?.heading}
         </h2>
-        <p class="site-cta-desc">
-          Let's discuss your vision. Whether it's a new home, renovation, or commercial project — we're here to make it happen.
-        </p>
+        {page.cta?.text && <p class="site-cta-desc">{page.cta.text}</p>}
       </div>
       <div class="site-cta-actions">
-        <a href="/contact" class="site-btn site-btn-white">Get a Free Consultation</a>
-        <a href="tel:5550123456" class="site-cta-phone">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          (555) 012-3456
-        </a>
+        {page.cta?.primaryButton && <a href={page.cta.primaryButton.href} class="site-btn site-btn-white">{page.cta.primaryButton.label}</a>}
+        {page.cta?.phoneHref && page.cta.phoneLabel && (
+          <a href={page.cta.phoneHref} class="site-cta-phone">
+            <span set:html={siteIcon('phone', 18)} />
+            {page.cta.phoneLabel}
+          </a>
+        )}
       </div>
     </div>
   </section>

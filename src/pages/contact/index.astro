@@ -1,10 +1,29 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { siteIcon } from '../../lib/icons';
+import { getPage, type ContactInfoCard, type FormOption, type PageDocument, type PageHero, type ServiceAreaItem } from '../../lib/sanityPages';
+
+type ContactPage = PageDocument & {
+  hero: PageHero;
+  form?: {
+    heading?: string;
+    subheading?: string;
+    projectTypes?: FormOption[];
+    submitLabel?: string;
+  };
+  infoCards?: ContactInfoCard[];
+  serviceArea?: {
+    heading?: string;
+    areas?: ServiceAreaItem[];
+  };
+};
+
+const page = await getPage<ContactPage>('contactPage');
 ---
 
 <Layout
-  title="Contact | You First Construction"
-  description="Get in touch with You First Construction for a free consultation on your next construction or remodeling project."
+  title={page.seo.title}
+  description={page.seo.description}
   currentPage="contact"
 >
   <!-- ===================== HERO ===================== -->
@@ -15,14 +34,12 @@ import Layout from '../../layouts/Layout.astro';
         <span class="site-breadcrumb-sep">/</span>
         <span class="site-breadcrumb-current">Contact</span>
       </nav>
-      <div class="site-badge site-badge-light site-reveal">Get in Touch</div>
+      {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
       <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
-        Let us build something<br />together.
+        {page.hero.heading}
       </h1>
       <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
-      <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">
-        Whether you are ready to start or just exploring options, we are here to help. Reach out and we will get back to you within one business day.
-      </p>
+      {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
     </div>
   </section>
 
@@ -32,8 +49,8 @@ import Layout from '../../layouts/Layout.astro';
       <div class="site-contact-grid">
         <!-- Form -->
         <div class="site-contact-form-wrap site-reveal">
-          <h2 class="site-form-heading">Send us a message</h2>
-          <p class="site-form-subhead">Fill out the form below and our team will respond within 24 hours.</p>
+          <h2 class="site-form-heading">{page.form?.heading}</h2>
+          {page.form?.subheading && <p class="site-form-subhead">{page.form.subheading}</p>}
 
           <form class="site-form" action="#" method="post">
             <div class="site-form-row">
@@ -61,13 +78,9 @@ import Layout from '../../layouts/Layout.astro';
               <label for="projectType" class="site-form-label">Project Type</label>
               <select id="projectType" name="projectType" required class="site-form-input site-form-select">
                 <option value="" disabled selected>Select a project type</option>
-                <option value="custom-home">Custom Home</option>
-                <option value="spec-home">Spec Home</option>
-                <option value="commercial">Commercial Construction</option>
-                <option value="residential-remodel">Residential Remodel</option>
-                <option value="commercial-remodel">Commercial Remodel</option>
-                <option value="restoration">Restoration / Disaster Recovery</option>
-                <option value="other">Other</option>
+                {(page.form?.projectTypes ?? []).map((option) => (
+                  <option value={option.value}>{option.label}</option>
+                ))}
               </select>
             </div>
 
@@ -77,86 +90,35 @@ import Layout from '../../layouts/Layout.astro';
             </div>
 
             <button type="submit" class="site-btn site-btn-primary" style="width: 100%;">
-              Send Message
+              {page.form?.submitLabel}
             </button>
           </form>
         </div>
 
         <!-- Info sidebar -->
         <div class="site-contact-sidebar">
-          <div class="site-info-card site-reveal site-reveal-d1">
-            <div class="site-info-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {(page.infoCards ?? []).map((card, i) => (
+            <div class={`site-info-card site-reveal site-reveal-d${i + 1}`}>
+              <div class="site-info-icon" set:html={siteIcon(card.iconKey, 24)} />
+              <div>
+                <h4 class="site-info-title">{card.title}</h4>
+                <p class="site-info-value">{card.value}</p>
+                {card.note && <p class="site-info-note">{card.note}</p>}
+              </div>
             </div>
-            <div>
-              <h4 class="site-info-title">Phone</h4>
-              <p class="site-info-value">(555) 012-3456</p>
-              <p class="site-info-note">Mon - Fri, 8am - 6pm</p>
-            </div>
-          </div>
-
-          <div class="site-info-card site-reveal site-reveal-d2">
-            <div class="site-info-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 6l-10 7L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div>
-              <h4 class="site-info-title">Email</h4>
-              <p class="site-info-value">info@youfirstconstruction.com</p>
-              <p class="site-info-note">We respond within 24 hours</p>
-            </div>
-          </div>
-
-          <div class="site-info-card site-reveal site-reveal-d3">
-            <div class="site-info-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
-            </div>
-            <div>
-              <h4 class="site-info-title">Office</h4>
-              <p class="site-info-value">Houston, TX</p>
-              <p class="site-info-note">Serving the Greater Houston Area</p>
-            </div>
-          </div>
-
-          <div class="site-info-card site-reveal site-reveal-d4">
-            <div class="site-info-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div>
-              <h4 class="site-info-title">Hours</h4>
-              <p class="site-info-value">Mon - Fri: 8am - 6pm</p>
-              <p class="site-info-note">Sat: 9am - 2pm</p>
-            </div>
-          </div>
+          ))}
 
           <!-- Service area block (replaces "Map Coming Soon") -->
           <div class="site-service-area site-reveal site-reveal-d5">
             <div class="site-service-area-inner site-texture">
-              <h4 class="site-sa-heading">Service Area</h4>
+              <h4 class="site-sa-heading">{page.serviceArea?.heading}</h4>
               <div class="site-sa-list">
-                <div class="site-sa-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2" stroke="currentColor" stroke-width="2"/></svg>
-                  Houston Metro
-                </div>
-                <div class="site-sa-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2" stroke="currentColor" stroke-width="2"/></svg>
-                  Sugar Land
-                </div>
-                <div class="site-sa-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2" stroke="currentColor" stroke-width="2"/></svg>
-                  The Woodlands
-                </div>
-                <div class="site-sa-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2" stroke="currentColor" stroke-width="2"/></svg>
-                  Katy
-                </div>
-                <div class="site-sa-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2" stroke="currentColor" stroke-width="2"/></svg>
-                  Pearland
-                </div>
-                <div class="site-sa-item">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2" stroke="currentColor" stroke-width="2"/></svg>
-                  Galveston County
-                </div>
+                {(page.serviceArea?.areas ?? []).map((area) => (
+                  <div class="site-sa-item">
+                    <span set:html={siteIcon('location', 14)} />
+                    {area.label}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

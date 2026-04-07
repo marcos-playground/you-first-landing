@@ -2,14 +2,19 @@
 
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
-import node from "@astrojs/node";
+import vercel from "@astrojs/vercel";
+import { loadEnv } from "vite";
 
 import sanity from "@sanity/astro";
 import react from "@astrojs/react";
 
+const env = loadEnv(process.env.NODE_ENV ?? "production", process.cwd(), "");
+const sanityProjectId = env.PUBLIC_SANITY_PROJECT_ID;
+const sanityDataset = env.PUBLIC_SANITY_DATASET;
+
 // https://astro.build/config
 export default defineConfig({
-  // adapter: node({ mode: "standalone" }),
+  adapter: vercel(),
   vite: {
     plugins: [tailwindcss()],
   },
@@ -17,8 +22,8 @@ export default defineConfig({
   integrations: [
     react(),
     sanity({
-      projectId: "wkc8eld4",
-      dataset: "production",
+      projectId: sanityProjectId,
+      dataset: sanityDataset,
 
       useCdn: false,
       apiVersion: "2026-04-06",
