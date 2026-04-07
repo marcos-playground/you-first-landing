@@ -1,0 +1,333 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteIcon } from '../../lib/icons';
+import { cmsImageFallbackSrc, type ContactPage } from '../../lib/sanityPages';
+interface Props {
+  page: ContactPage;
+  visualEditing?: boolean;
+}
+const { page, visualEditing = false } = Astro.props;
+---
+
+<Layout
+  title={page.seo.title}
+  description={page.seo.description}
+  currentPage="contact"
+  visualEditing={visualEditing}
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="site-page-hero site-bg-dark site-texture">
+    <div class="site-container">
+      <div class="site-page-hero-grid has-image">
+        <div>
+          <nav class="site-breadcrumb site-reveal" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span class="site-breadcrumb-sep">/</span>
+            <span class="site-breadcrumb-current">Contact</span>
+          </nav>
+          {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
+          <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
+            {page.hero.heading}
+          </h1>
+          <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
+          {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
+        </div>
+
+        <div class="site-page-hero-media site-reveal site-reveal-d2">
+          <img
+            src={page.hero.image?.asset?.url ?? cmsImageFallbackSrc}
+            alt={page.hero.image?.alt ?? ''}
+            class:list={['site-cms-image', { 'is-empty': !page.hero.image?.asset?.url }]}
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FORM + INFO ===================== -->
+  <section class="site-section" style="padding-top: 3rem;">
+    <div class="site-container">
+      <div class="site-contact-grid">
+        <!-- Form -->
+        <div class="site-contact-form-wrap site-reveal">
+          <h2 class="site-form-heading">{page.form?.heading}</h2>
+          {page.form?.subheading && <p class="site-form-subhead">{page.form.subheading}</p>}
+
+          <form class="site-form" action="#" method="post">
+            <div class="site-form-row">
+              <div class="site-form-group">
+                <label for="firstName" class="site-form-label">First Name</label>
+                <input type="text" id="firstName" name="firstName" required class="site-form-input" placeholder="John" />
+              </div>
+              <div class="site-form-group">
+                <label for="lastName" class="site-form-label">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required class="site-form-input" placeholder="Doe" />
+              </div>
+            </div>
+
+            <div class="site-form-group">
+              <label for="email" class="site-form-label">Email</label>
+              <input type="email" id="email" name="email" required class="site-form-input" placeholder="john@example.com" />
+            </div>
+
+            <div class="site-form-group">
+              <label for="phone" class="site-form-label">Phone</label>
+              <input type="tel" id="phone" name="phone" class="site-form-input" placeholder="(555) 123-4567" />
+            </div>
+
+            <div class="site-form-group">
+              <label for="projectType" class="site-form-label">Project Type</label>
+              <select id="projectType" name="projectType" required class="site-form-input site-form-select">
+                <option value="" disabled selected>Select a project type</option>
+                {(page.form?.projectTypes ?? []).map((option) => (
+                  <option value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div class="site-form-group">
+              <label for="message" class="site-form-label">Tell us about your project</label>
+              <textarea id="message" name="message" rows="5" required class="site-form-input site-form-textarea" placeholder="Describe your project, timeline, budget range, and any other details..."></textarea>
+            </div>
+
+            <button type="submit" class="site-btn site-btn-primary" style="width: 100%;">
+              {page.form?.submitLabel}
+            </button>
+          </form>
+        </div>
+
+        <!-- Info sidebar -->
+        <div class="site-contact-sidebar">
+          {(page.infoCards ?? []).map((card, i) => (
+            <div class={`site-info-card site-reveal site-reveal-d${i + 1}`}>
+              <div class="site-info-icon" set:html={siteIcon(card.iconKey, 24)} />
+              <div>
+                <h4 class="site-info-title">{card.title}</h4>
+                <p class="site-info-value">{card.value}</p>
+                {card.note && <p class="site-info-note">{card.note}</p>}
+              </div>
+            </div>
+          ))}
+
+          <!-- Service area block (replaces "Map Coming Soon") -->
+          <div class="site-service-area site-reveal site-reveal-d5">
+            <div class="site-service-area-inner site-texture">
+              <h4 class="site-sa-heading">{page.serviceArea?.heading}</h4>
+              <div class="site-sa-list">
+                {(page.serviceArea?.areas ?? []).map((area) => (
+                  <div class="site-sa-item">
+                    <span set:html={siteIcon('location', 14)} />
+                    {area.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ===================== CONTACT GRID ===================== */
+  .site-contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  @media (min-width: 860px) {
+    .site-contact-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; }
+  }
+
+  /* ===================== FORM ===================== */
+  .site-contact-form-wrap {
+    background: white;
+    border: 1px solid rgba(42, 42, 42, 0.1);
+    border-radius: var(--site-radius-lg);
+    padding: 2.5rem 2rem;
+  }
+
+  .site-form-heading {
+    font-family: var(--site-font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--site-charcoal);
+    margin-bottom: 0.25rem;
+  }
+
+  .site-form-subhead {
+    font-size: 0.9375rem;
+    color: var(--site-charcoal-light);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .site-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .site-form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 480px) {
+    .site-form-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  .site-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .site-form-label {
+    font-family: var(--site-font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--site-charcoal);
+    letter-spacing: 0.01em;
+  }
+
+  .site-form-input {
+    font-family: var(--site-font-body);
+    font-size: 0.9375rem;
+    color: var(--site-charcoal);
+    background: var(--site-white);
+    border: 1px solid rgba(42, 42, 42, 0.12);
+    border-radius: var(--site-radius);
+    padding: 0.75rem 1rem;
+    transition: border-color 0.25s var(--site-ease), box-shadow 0.25s var(--site-ease);
+    outline: none;
+    width: 100%;
+  }
+
+  .site-form-input::placeholder {
+    color: var(--site-stone);
+  }
+
+  .site-form-input:focus {
+    border-color: var(--site-ember);
+    box-shadow: 0 0 0 3px rgba(232, 97, 26, 0.1);
+  }
+
+  .site-form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%235A5A5A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  .site-form-textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  /* ===================== INFO CARDS ===================== */
+  .site-contact-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .site-info-card {
+    background: white;
+    border: 1px solid rgba(42, 42, 42, 0.1);
+    border-radius: var(--site-radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: border-color 0.3s;
+  }
+
+  .site-info-card:hover {
+    border-color: rgba(232, 97, 26, 0.2);
+  }
+
+  .site-info-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--site-cream);
+    border-radius: var(--site-radius);
+    color: var(--site-ember);
+  }
+
+  .site-info-title {
+    font-family: var(--site-font-body);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--site-stone);
+    margin-bottom: 0.125rem;
+  }
+
+  .site-info-value {
+    font-family: var(--site-font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--site-charcoal);
+  }
+
+  .site-info-note {
+    font-size: 0.8125rem;
+    color: var(--site-stone);
+    margin-top: 0.125rem;
+  }
+
+  /* ===================== SERVICE AREA ===================== */
+  .site-service-area {
+    border-radius: var(--site-radius-lg);
+    overflow: hidden;
+  }
+
+  .site-service-area-inner {
+    background: var(--site-charcoal);
+    padding: 2rem;
+    position: relative;
+    border-radius: var(--site-radius-lg);
+  }
+
+  .site-sa-heading {
+    font-family: var(--site-font-body);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--site-ember);
+    margin-bottom: 1.25rem;
+  }
+
+  .site-sa-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .site-sa-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .site-sa-item svg {
+    color: var(--site-ember);
+    flex-shrink: 0;
+  }
+</style>

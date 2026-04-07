@@ -1,0 +1,584 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteIcon } from '../../lib/icons';
+import { cmsImageFallbackSrc, type HomePage } from '../../lib/sanityPages';
+interface Props {
+  page: HomePage;
+  visualEditing?: boolean;
+}
+const { page, visualEditing = false } = Astro.props;
+---
+
+<Layout
+  title={page.seo.title}
+  description={page.seo.description}
+  currentPage="home"
+  visualEditing={visualEditing}
+>
+  <!-- ===================== HERO — Full-bleed dark with ember accent ===================== -->
+  <section class="site-hero site-texture">
+    <div class="site-hero-inner">
+      <div class="site-hero-content">
+        {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
+
+        <h1 class="site-display site-display-xl site-hero-heading site-reveal site-reveal-d1">
+          {page.hero.heading}
+        </h1>
+
+        <div class="site-ember-bar site-reveal site-reveal-d2"></div>
+
+        {page.hero.text && <p class="site-hero-desc site-reveal site-reveal-d3">{page.hero.text}</p>}
+
+        <div class="site-hero-actions site-reveal site-reveal-d4">
+          {page.hero.primaryButton && <a href={page.hero.primaryButton.href} class="site-btn site-btn-primary">{page.hero.primaryButton.label}</a>}
+          {page.hero.secondaryButton && <a href={page.hero.secondaryButton.href} class="site-btn site-btn-outline-light">{page.hero.secondaryButton.label}</a>}
+        </div>
+      </div>
+
+      <!-- Hero image area -->
+      <div class="site-hero-visual site-reveal site-reveal-d2">
+        <div class="site-hero-img-wrap">
+          <img
+            src={page.hero.image?.asset?.url ?? cmsImageFallbackSrc}
+            alt={page.hero.image?.alt ?? ''}
+            class:list={['site-cms-image', { 'is-empty': !page.hero.image?.asset?.url }]}
+            loading="eager"
+            decoding="async"
+          />
+          <!-- Ember corner accent -->
+          <div class="site-hero-corner"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="site-hero-stats site-reveal site-reveal-d5">
+      {(page.hero.stats ?? []).map((stat) => (
+        <div class="site-stat">
+          <span class="site-stat-num">{stat.value}</span>
+          <span class="site-stat-label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES ===================== -->
+  <section class="site-section">
+    <div class="site-container">
+      <div class="site-split-header">
+        <div>
+          {page.services?.badge && <div class="site-badge site-reveal">{page.services.badge}</div>}
+          <h2 class="site-display site-display-lg site-reveal site-reveal-d1" style="margin-top: 1rem;">
+            {page.services?.heading}
+          </h2>
+        </div>
+        <div class="site-reveal site-reveal-d2">
+          {page.services?.text && <p class="site-text">{page.services.text}</p>}
+          {page.services?.button && (
+            <div style="margin-top: 1.5rem;">
+              <a href={page.services.button.href} class="site-btn site-btn-outline">{page.services.button.label}</a>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div class="site-services-grid">
+        {(page.services?.cards ?? []).map((svc, i) => (
+          <a href={svc.href ?? '/services'} class={`site-svc-card site-reveal site-reveal-d${i + 1}`}>
+            <div class="site-svc-icon-wrap" set:html={siteIcon(svc.iconKey)} />
+            <h3 class="site-svc-title">{svc.title}</h3>
+            {svc.description && <p class="site-svc-desc">{svc.description}</p>}
+            {svc.linkLabel && <span class="site-svc-link">{svc.linkLabel} &rarr;</span>}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROJECTS (dark section) ===================== -->
+  <section class="site-section site-bg-dark site-texture">
+    <div class="site-container">
+      <div class="site-section-header-center site-reveal">
+        {page.work?.badge && <div class="site-badge site-badge-light">{page.work.badge}</div>}
+        <h2 class="site-display site-display-lg" style="margin-top: 1rem;">
+          {page.work?.heading}
+        </h2>
+      </div>
+
+      <div class="site-projects-mosaic">
+        {(page.work?.projects ?? []).map((project, i) => (
+          <div class:list={['site-mosaic-item', { 'site-mosaic-wide': i === 0 }, `site-reveal site-reveal-d${i + 1}`]}>
+            <div class="site-mosaic-img">
+              <img
+                src={project.image?.asset?.url ?? cmsImageFallbackSrc}
+                alt={project.image?.alt ?? project.title}
+                class:list={['site-cms-image', { 'is-empty': !project.image?.asset?.url }]}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="site-mosaic-info">
+              <span class="site-mosaic-cat">{project.category}</span>
+              <h3 class="site-mosaic-title">{project.title}</h3>
+              {(project.location || project.sqft) && (
+                <span class="site-mosaic-meta">
+                  {[project.location, project.sqft ? `${project.sqft} sq ft` : undefined].filter(Boolean).join(' — ')}
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {page.work?.button && (
+        <div style="text-align: center; margin-top: 3rem;" class="site-reveal site-reveal-d4">
+          <a href={page.work.button.href} class="site-btn site-btn-primary">{page.work.button.label}</a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT PREVIEW ===================== -->
+  <section class="site-section site-bg-cream site-texture">
+    <div class="site-container">
+      <div class="site-about-split">
+        <div class="site-about-left site-reveal">
+          {page.about?.badge && <div class="site-badge">{page.about.badge}</div>}
+          <h2 class="site-display site-display-lg" style="margin-top: 1rem;">
+            {page.about?.heading}
+          </h2>
+          <div class="site-ember-bar" style="margin-top: 1.25rem;"></div>
+          {page.about?.text && <p class="site-text" style="margin-top: 1.25rem;">{page.about.text}</p>}
+          {page.about?.secondaryText && <p class="site-text" style="margin-top: 0.75rem;">{page.about.secondaryText}</p>}
+          {page.about?.button && (
+            <div style="margin-top: 2rem;">
+              <a href={page.about.button.href} class="site-btn site-btn-dark">{page.about.button.label}</a>
+            </div>
+          )}
+        </div>
+
+        <div class="site-about-right">
+          <div class="site-about-values-stack">
+            {(page.about?.values ?? []).map((value, i) => (
+              <div class={`site-val-item site-card site-reveal site-reveal-d${i + 1}`}>
+                {value.num && <div class="site-val-num">{value.num}</div>}
+                <div>
+                  <h4 class="site-val-title">{value.title}</h4>
+                  {value.description && <p class="site-val-desc">{value.description}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="site-cta-band">
+    <div class="site-container site-reveal">
+      <div class="site-cta-content">
+        <h2 class="site-display site-display-lg" style="color: white;">
+          {page.cta?.heading}
+        </h2>
+        {page.cta?.text && <p class="site-cta-desc">{page.cta.text}</p>}
+      </div>
+      <div class="site-cta-actions">
+        {page.cta?.primaryButton && <a href={page.cta.primaryButton.href} class="site-btn site-btn-white">{page.cta.primaryButton.label}</a>}
+        {page.cta?.phoneHref && page.cta.phoneLabel && (
+          <a href={page.cta.phoneHref} class="site-cta-phone">
+            <span set:html={siteIcon('phone', 18)} />
+            {page.cta.phoneLabel}
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ===================== HERO ===================== */
+  .site-hero {
+    background: var(--site-charcoal);
+    color: white;
+    padding: 8rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: radial-gradient(ellipse at 80% 40%, rgba(232, 97, 26, 0.1) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @media (min-width: 768px) {
+    .site-hero { padding: 10rem 2rem 0; }
+  }
+
+  .site-hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (min-width: 960px) {
+    .site-hero-inner {
+      grid-template-columns: 1.15fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .site-hero-heading { color: white; }
+
+  .site-hero-desc {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 520px;
+    margin-top: 1.5rem;
+  }
+
+  .site-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+
+  .site-btn-outline-light {
+    color: white;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .site-btn-outline-light:hover {
+    border-color: white;
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Hero image */
+  .site-hero-visual { position: relative; }
+
+  .site-hero-img-wrap {
+    border-radius: var(--site-radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    position: relative;
+  }
+
+  .site-hero-corner {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    background: var(--site-ember);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    z-index: 3;
+  }
+
+  /* Stats */
+  .site-hero-stats {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.04);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 4rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (min-width: 640px) {
+    .site-hero-stats {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+  }
+
+  .site-stat {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .site-stat:last-child { border-right: none; }
+
+  @media (min-width: 640px) {
+    .site-stat { border-bottom: none; }
+  }
+
+  .site-stat-num {
+    display: block;
+    font-family: var(--site-font-display);
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--site-ember);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .site-stat-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 0.5rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ===================== SERVICES ===================== */
+  .site-split-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .site-split-header {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+    }
+  }
+
+  .site-services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .site-services-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .site-svc-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    text-decoration: none;
+    color: inherit;
+    background: white;
+    border: 1px solid rgba(42, 42, 42, 0.1);
+    border-radius: var(--site-radius-lg);
+    padding: 2rem;
+    transition: all 0.4s var(--site-ease);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-svc-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background: var(--site-ember);
+    border-radius: 0 0 2px 0;
+    transition: height 0.4s var(--site-ease);
+  }
+
+  .site-svc-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px -12px rgba(42, 42, 42, 0.15);
+    border-color: rgba(232, 97, 26, 0.25);
+  }
+
+  .site-svc-card:hover::before { height: 100%; }
+
+  .site-svc-icon-wrap {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--site-cream);
+    border-radius: var(--site-radius);
+    color: var(--site-ember);
+  }
+
+  .site-svc-title {
+    font-family: var(--site-font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--site-charcoal);
+  }
+
+  .site-svc-desc {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--site-charcoal-light);
+    flex: 1;
+  }
+
+  .site-svc-link {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--site-ember);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.3s, transform 0.3s var(--site-ease);
+  }
+
+  .site-svc-card:hover .site-svc-link {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ===================== PROJECTS (dark) ===================== */
+  .site-section-header-center {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .site-projects-mosaic {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .site-projects-mosaic {
+      grid-template-columns: 1.3fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .site-mosaic-wide {
+      grid-row: 1 / 3;
+    }
+  }
+
+  .site-mosaic-item {
+    position: relative;
+    border-radius: var(--site-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .site-mosaic-img {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .site-mosaic-wide .site-mosaic-img {
+    aspect-ratio: auto;
+    position: absolute;
+    inset: 0;
+  }
+
+  .site-mosaic-wide {
+    min-height: 380px;
+  }
+
+  @media (min-width: 768px) {
+    .site-mosaic-wide { min-height: 440px; }
+  }
+
+  .site-mosaic-item .site-cms-image {
+    transition: transform 0.6s var(--site-ease);
+  }
+
+  .site-mosaic-item:hover .site-cms-image {
+    transform: scale(1.04);
+  }
+
+  .site-mosaic-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    background: linear-gradient(to top, rgba(42, 42, 42, 0.85) 0%, rgba(42, 42, 42, 0.4) 60%, transparent 100%);
+    z-index: 2;
+  }
+
+  .site-mosaic-cat {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--site-ember-light);
+  }
+
+  .site-mosaic-title {
+    font-family: var(--site-font-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: white;
+    margin-top: 0.25rem;
+  }
+
+  .site-mosaic-meta {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 0.25rem;
+  }
+
+  /* ===================== ABOUT ===================== */
+  .site-about-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (min-width: 860px) {
+    .site-about-split {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  .site-about-values-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .site-val-item {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .site-val-num {
+    font-family: var(--site-font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--site-ember);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 48px;
+  }
+
+  .site-val-title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--site-charcoal);
+    margin-bottom: 0.25rem;
+  }
+
+  .site-val-desc {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--site-charcoal-light);
+  }
+</style>

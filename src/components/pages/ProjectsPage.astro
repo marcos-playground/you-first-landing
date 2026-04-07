@@ -1,0 +1,280 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { siteIcon } from '../../lib/icons';
+import { cmsImageFallbackSrc, type ProjectsPage } from '../../lib/sanityPages';
+interface Props {
+  page: ProjectsPage;
+  visualEditing?: boolean;
+}
+const { page, visualEditing = false } = Astro.props;
+---
+
+<Layout
+  title={page.seo.title}
+  description={page.seo.description}
+  currentPage="projects"
+  visualEditing={visualEditing}
+>
+  <!-- ===================== HERO ===================== -->
+  <section class="site-page-hero site-bg-dark site-texture">
+    <div class="site-container">
+      <div class="site-page-hero-grid has-image">
+        <div>
+          <nav class="site-breadcrumb site-reveal" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span class="site-breadcrumb-sep">/</span>
+            <span class="site-breadcrumb-current">Projects</span>
+          </nav>
+          {page.hero.badge && <div class="site-badge site-badge-light site-reveal">{page.hero.badge}</div>}
+          <h1 class="site-display site-display-xl site-reveal site-reveal-d1" style="margin-top: 1rem;">
+            {page.hero.heading}
+          </h1>
+          <div class="site-ember-bar site-reveal site-reveal-d2" style="margin-top: 1.25rem;"></div>
+          {page.hero.text && <p class="site-text site-reveal site-reveal-d3" style="max-width: 520px; margin-top: 1rem;">{page.hero.text}</p>}
+        </div>
+
+        <div class="site-page-hero-media site-reveal site-reveal-d2">
+          <img
+            src={page.hero.image?.asset?.url ?? cmsImageFallbackSrc}
+            alt={page.hero.image?.alt ?? ''}
+            class:list={['site-cms-image', { 'is-empty': !page.hero.image?.asset?.url }]}
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FILTER + GRID ===================== -->
+  <section class="site-section" style="padding-top: 3rem;">
+    <div class="site-container">
+      <!-- Filter pills -->
+      <div class="site-filter-bar site-reveal">
+        {(page.categories ?? []).map((cat) => (
+          <button
+            class:list={['site-filter-pill', { 'is-active': cat === 'All' }]}
+            data-filter={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Project grid -->
+      <div class="site-project-grid">
+        {(page.projects ?? []).map((p, i) => (
+          <div
+            class:list={['site-project-card', { 'is-featured': p.featured }, `site-reveal site-reveal-d${(i % 4) + 1}`]}
+            data-category={p.category}
+          >
+            <div class="site-proj-img-wrap">
+              <img
+                src={p.image?.asset?.url ?? cmsImageFallbackSrc}
+                alt={p.image?.alt ?? p.title}
+                class:list={['site-cms-image', { 'is-empty': !p.image?.asset?.url }]}
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="site-proj-badge-wrap">
+                <span class="site-proj-cat">{p.category}</span>
+              </div>
+            </div>
+            <div class="site-proj-info">
+              <h3 class="site-proj-title">{p.title}</h3>
+              {p.description && <p class="site-proj-desc">{p.description}</p>}
+              <div class="site-proj-meta">
+                {p.location && <span>{p.location}</span>}
+                {p.location && p.sqft && <span class="site-proj-dot"></span>}
+                {p.sqft && <span>{p.sqft} sq ft</span>}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA BAND ===================== -->
+  <section class="site-cta-band">
+    <div class="site-container site-reveal">
+      <div class="site-cta-content">
+        <h2 class="site-display site-display-lg" style="color: white;">
+          {page.cta?.heading}
+        </h2>
+        {page.cta?.text && <p class="site-cta-desc">{page.cta.text}</p>}
+      </div>
+      <div class="site-cta-actions">
+        {page.cta?.primaryButton && <a href={page.cta.primaryButton.href} class="site-btn site-btn-white">{page.cta.primaryButton.label}</a>}
+        {page.cta?.phoneHref && page.cta.phoneLabel && (
+          <a href={page.cta.phoneHref} class="site-cta-phone">
+            <span set:html={siteIcon('phone', 18)} />
+            {page.cta.phoneLabel}
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ===================== FILTER BAR ===================== */
+  .site-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .site-filter-pill {
+    font-family: var(--site-font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--site-charcoal-light);
+    background: rgba(42, 42, 42, 0.05);
+    border: 1px solid rgba(42, 42, 42, 0.08);
+    border-radius: var(--site-radius);
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.25s var(--site-ease);
+  }
+
+  .site-filter-pill:hover {
+    background: rgba(42, 42, 42, 0.1);
+    color: var(--site-charcoal);
+  }
+
+  .site-filter-pill.is-active {
+    color: white;
+    background: var(--site-ember);
+    border-color: var(--site-ember);
+    font-weight: 700;
+  }
+
+  /* ===================== PROJECT GRID ===================== */
+  .site-project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .site-project-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 960px) {
+    .site-project-grid { grid-template-columns: 1fr 1fr 1fr; }
+    .site-project-card.is-featured { grid-column: span 2; }
+  }
+
+  .site-project-card {
+    border-radius: var(--site-radius-lg);
+    overflow: hidden;
+    background: white;
+    border: 1px solid rgba(42, 42, 42, 0.1);
+    transition: transform 0.4s var(--site-ease), box-shadow 0.4s, border-color 0.3s;
+  }
+
+  .site-project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px -8px rgba(42, 42, 42, 0.12);
+    border-color: rgba(232, 97, 26, 0.2);
+  }
+
+  .site-proj-img-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-proj-img-wrap .site-cms-image {
+    aspect-ratio: 16 / 10;
+    transition: transform 0.6s var(--site-ease);
+  }
+
+  .site-project-card.is-featured .site-proj-img-wrap .site-cms-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .site-project-card:hover .site-cms-image {
+    transform: scale(1.04);
+  }
+
+  .site-proj-badge-wrap {
+    position: absolute;
+    top: 0.875rem;
+    left: 0.875rem;
+  }
+
+  .site-proj-cat {
+    font-family: var(--site-font-body);
+    font-size: 0.6875rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: white;
+    background: rgba(42, 42, 42, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 0.35rem 0.875rem;
+    border-radius: var(--site-radius);
+  }
+
+  .site-proj-info {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .site-proj-title {
+    font-family: var(--site-font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--site-charcoal);
+    margin-bottom: 0.375rem;
+  }
+
+  .site-proj-desc {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--site-charcoal-light);
+    margin-bottom: 0.75rem;
+  }
+
+  .site-proj-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--site-font-body);
+    font-size: 0.8125rem;
+    color: var(--site-stone);
+    font-weight: 500;
+  }
+
+  .site-proj-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--site-sand);
+  }
+</style>
+
+<script>
+  const pills = document.querySelectorAll('.site-filter-pill');
+  const cards = document.querySelectorAll('.site-project-card');
+
+  pills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      pills.forEach((p) => p.classList.remove('is-active'));
+      pill.classList.add('is-active');
+
+      const filter = pill.getAttribute('data-filter');
+
+      cards.forEach((card) => {
+        const cat = card.getAttribute('data-category');
+        if (filter === 'All' || cat === filter) {
+          (card as HTMLElement).style.display = '';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

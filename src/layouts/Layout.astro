@@ -1,17 +1,20 @@
 ---
 import { ClientRouter, fade } from 'astro:transitions';
+import { VisualEditing } from '@sanity/astro/visual-editing';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
   currentPage?: string;
+  visualEditing?: boolean;
 }
 
 const {
   title = 'You First Construction | Custom Home Builders',
   description = 'Premium custom home construction, remodeling, and restoration services.',
   currentPage = 'home',
+  visualEditing = false,
 } = Astro.props;
 
 const navLinks = [
@@ -98,6 +101,8 @@ const currentYear = new Date().getFullYear();
     <main transition:animate={fade({ duration: '0.28s' })}>
       <slot />
     </main>
+
+    <VisualEditing enabled={visualEditing} zIndex={10000} />
 
     <!-- Footer -->
     <footer class="site-footer" transition:animate="none">
