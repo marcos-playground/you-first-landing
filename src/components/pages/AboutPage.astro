@@ -2,11 +2,13 @@
 import Layout from '../../layouts/Layout.astro';
 import { siteIcon } from '../../lib/icons';
 import { cmsImageFallbackSrc, type AboutPage } from '../../lib/sanityPages';
+import { renderPortableText } from '../../lib/portableText';
 interface Props {
   page: AboutPage;
   visualEditing?: boolean;
 }
 const { page, visualEditing = false } = Astro.props;
+const journeyHtml = renderPortableText(page.timeline?.content);
 ---
 
 <Layout
@@ -105,7 +107,7 @@ const { page, visualEditing = false } = Astro.props;
     </div>
   </section>
 
-  <!-- ===================== TIMELINE ===================== -->
+  <!-- ===================== JOURNEY ===================== -->
   <section class="site-section site-bg-dark site-texture">
     <div class="site-container">
       <div style="text-align: center;" class="site-reveal">
@@ -113,19 +115,7 @@ const { page, visualEditing = false } = Astro.props;
         <h2 class="site-display site-display-lg" style="margin-top: 1rem;">{page.timeline?.heading}</h2>
       </div>
 
-      <div class="site-timeline">
-        {(page.timeline?.milestones ?? []).map((m, i) => (
-          <div class={`site-timeline-item site-reveal site-reveal-d${(i % 6) + 1}`}>
-            <div class="site-timeline-marker">
-              <div class="site-timeline-dot"></div>
-            </div>
-            <div class="site-timeline-content">
-              <span class="site-timeline-year">{m.year}</span>
-              <p class="site-timeline-event">{m.event}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      {journeyHtml && <div class="site-journey-content site-reveal site-reveal-d2" set:html={journeyHtml} />}
     </div>
   </section>
 
@@ -286,62 +276,68 @@ const { page, visualEditing = false } = Astro.props;
     color: var(--site-charcoal-light);
   }
 
-  /* ===================== TIMELINE ===================== */
-  .site-timeline {
-    max-width: 640px;
+  /* ===================== JOURNEY CONTENT ===================== */
+  .site-journey-content {
+    max-width: 720px;
     margin: 3rem auto 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    position: relative;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 1rem;
+    line-height: 1.8;
   }
 
-  .site-timeline::before {
-    content: '';
-    position: absolute;
-    left: 9px;
-    top: 28px;
-    bottom: 28px;
-    width: 2px;
-    background: linear-gradient(to bottom, rgba(232, 97, 26, 0.4), rgba(232, 97, 26, 0.1));
-    border-radius: 2px;
+  .site-journey-content :global(* + *) {
+    margin-top: 1rem;
   }
 
-  .site-timeline-item {
-    display: flex;
-    gap: 1.25rem;
-    padding: 1.25rem 0;
-    position: relative;
-  }
-
-  .site-timeline-marker {
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-  }
-
-  .site-timeline-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--site-charcoal);
-    border: 3px solid var(--site-ember);
-    margin-top: 2px;
-  }
-
-  .site-timeline-year {
+  .site-journey-content :global(h2),
+  .site-journey-content :global(h3),
+  .site-journey-content :global(h4) {
+    color: white;
     font-family: var(--site-font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--site-ember);
-    display: block;
-    margin-bottom: 0.25rem;
+    font-weight: 800;
+    line-height: 1.1;
   }
 
-  .site-timeline-event {
-    font-size: 0.9375rem;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.6);
+  .site-journey-content :global(h2) { font-size: clamp(2rem, 5vw, 3.5rem); }
+  .site-journey-content :global(h3) { font-size: clamp(1.6rem, 4vw, 2.5rem); }
+  .site-journey-content :global(h4) { font-size: 1.35rem; }
+
+  .site-journey-content :global(strong) {
+    color: var(--site-gold);
+    font-weight: 800;
+  }
+
+  .site-journey-content :global(a) {
+    color: var(--site-gold);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .site-journey-content :global(ul),
+  .site-journey-content :global(ol) {
+    padding-left: 1.35rem;
+  }
+
+  .site-journey-content :global(li + li) {
+    margin-top: 0.5rem;
+  }
+
+  .site-journey-content :global(blockquote) {
+    border-left: 4px solid var(--site-ember);
+    color: rgba(255, 255, 255, 0.84);
+    font-family: var(--site-font-display);
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    font-style: italic;
+    line-height: 1.25;
+    padding-left: 1.25rem;
+  }
+
+  .site-journey-content :global(code) {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    color: white;
+    font-size: 0.9em;
+    padding: 0.15rem 0.35rem;
   }
 
 </style>

@@ -80,6 +80,54 @@ export const sharedTypes = [
     ],
   }),
   defineType({
+    name: "richText",
+    title: "Rich Text",
+    type: "array",
+    of: [
+      {
+        type: "block",
+        styles: [
+          { title: "Normal", value: "normal" },
+          { title: "Heading 2", value: "h2" },
+          { title: "Heading 3", value: "h3" },
+          { title: "Heading 4", value: "h4" },
+          { title: "Quote", value: "blockquote" },
+        ],
+        lists: [
+          { title: "Bullet", value: "bullet" },
+          { title: "Numbered", value: "number" },
+        ],
+        marks: {
+          decorators: [
+            { title: "Strong", value: "strong" },
+            { title: "Emphasis", value: "em" },
+            { title: "Underline", value: "underline" },
+            { title: "Code", value: "code" },
+          ],
+          annotations: [
+            defineField({
+              name: "link",
+              title: "Link",
+              type: "object",
+              fields: [
+                defineField({
+                  name: "href",
+                  title: "URL",
+                  type: "url",
+                  validation: (Rule) =>
+                    Rule.uri({
+                      allowRelative: true,
+                      scheme: ["http", "https", "mailto", "tel"],
+                    }),
+                }),
+              ],
+            }),
+          ],
+        },
+      },
+    ],
+  }),
+  defineType({
     name: "ctaBlock",
     title: "CTA Block",
     type: "object",
@@ -165,16 +213,6 @@ export const sharedTypes = [
       defineField({ name: "label", title: "Label", type: "string" }),
       defineField({ name: "heading", title: "Heading", type: "string", validation: (Rule) => Rule.required() }),
       defineField({ name: "text", title: "Text", type: "text", rows: 4 }),
-    ],
-  }),
-  defineType({
-    name: "quoteBlock",
-    title: "Quote Block",
-    type: "object",
-    fields: [
-      defineField({ name: "quote", title: "Quote", type: "text", rows: 4, validation: (Rule) => Rule.required() }),
-      defineField({ name: "author", title: "Author", type: "string" }),
-      defineField({ name: "source", title: "Source", type: "string" }),
     ],
   }),
   defineType({

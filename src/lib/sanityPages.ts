@@ -1,5 +1,6 @@
 import { sanityClient } from "sanity:client";
 import type { QueryOptions } from "@sanity/client";
+import type { PortableTextBlock } from "./portableText";
 
 export type ButtonLink = {
   label: string;
@@ -138,12 +139,6 @@ export type TextSectionCard = {
   text?: string;
 };
 
-export type QuoteBlock = {
-  quote: string;
-  author?: string;
-  source?: string;
-};
-
 export type ContactInfoCard = {
   iconKey?: string;
   title: string;
@@ -244,9 +239,8 @@ export type AboutPage = PageDocument & {
   timeline?: {
     badge?: string;
     heading?: string;
-    milestones?: MilestoneItem[];
+    content?: PortableTextBlock[];
   };
-  quote?: QuoteBlock;
   cta?: CtaBlock;
 };
 

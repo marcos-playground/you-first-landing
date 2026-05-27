@@ -149,15 +149,14 @@ export const pageTypes = [
       }),
       defineField({
         name: "timeline",
-        title: "Timeline",
+        title: "Journey Section",
         type: "object",
         fields: [
           defineField({ name: "badge", title: "Badge", type: "string" }),
           defineField({ name: "heading", title: "Heading", type: "string" }),
-          defineField({ name: "milestones", title: "Milestones", type: "array", of: arrayOf("milestoneItem") }),
+          defineField({ name: "content", title: "Content", type: "richText" }),
         ],
       }),
-      defineField({ name: "quote", title: "Quote", type: "quoteBlock" }),
       defineField({ name: "cta", title: "CTA", type: "ctaBlock" }),
     ],
   }),
