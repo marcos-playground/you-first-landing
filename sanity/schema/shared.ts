@@ -46,15 +46,6 @@ export const sharedTypes = [
     ],
   }),
   defineType({
-    name: "statItem",
-    title: "Statistic",
-    type: "object",
-    fields: [
-      defineField({ name: "value", title: "Value", type: "string", validation: (Rule) => Rule.required() }),
-      defineField({ name: "label", title: "Label", type: "string", validation: (Rule) => Rule.required() }),
-    ],
-  }),
-  defineType({
     name: "pageHero",
     title: "Page Hero",
     type: "object",

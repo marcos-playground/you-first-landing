@@ -50,16 +50,6 @@ const { page, visualEditing = false } = Astro.props;
         </div>
       </div>
     </div>
-
-    <!-- Stats bar -->
-    <div class="site-hero-stats site-reveal site-reveal-d5">
-      {(page.hero.stats ?? []).map((stat) => (
-        <div class="site-stat">
-          <span class="site-stat-num">{stat.value}</span>
-          <span class="site-stat-label">{stat.label}</span>
-        </div>
-      ))}
-    </div>
   </section>
 
   <!-- ===================== SERVICES ===================== -->
@@ -201,7 +191,7 @@ const { page, visualEditing = false } = Astro.props;
   .site-hero {
     background: var(--site-charcoal);
     color: white;
-    padding: 8rem 1.5rem 0;
+    padding: 8rem 1.5rem 4.5rem;
     position: relative;
     overflow: hidden;
   }
@@ -219,7 +209,7 @@ const { page, visualEditing = false } = Astro.props;
   }
 
   @media (min-width: 768px) {
-    .site-hero { padding: 10rem 2rem 0; }
+    .site-hero { padding: 10rem 2rem 6rem; }
   }
 
   .site-hero-inner {
@@ -287,59 +277,6 @@ const { page, visualEditing = false } = Astro.props;
     background: var(--site-ember);
     clip-path: polygon(100% 0, 100% 100%, 0 100%);
     z-index: 3;
-  }
-
-  /* Stats */
-  .site-hero-stats {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    background: rgba(255, 255, 255, 0.04);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    margin-top: 4rem;
-    position: relative;
-    z-index: 2;
-  }
-
-  @media (min-width: 640px) {
-    .site-hero-stats {
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-  }
-
-  .site-stat {
-    padding: 2rem 1.5rem;
-    text-align: center;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .site-stat:last-child { border-right: none; }
-
-  @media (min-width: 640px) {
-    .site-stat { border-bottom: none; }
-  }
-
-  .site-stat-num {
-    display: block;
-    font-family: var(--site-font-display);
-    font-size: 2.75rem;
-    font-weight: 800;
-    color: var(--site-ember);
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-
-  .site-stat-label {
-    display: block;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.45);
-    margin-top: 0.5rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
   }
 
   /* ===================== SERVICES ===================== */

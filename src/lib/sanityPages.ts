@@ -7,11 +7,6 @@ export type ButtonLink = {
   href: string;
 };
 
-export type StatItem = {
-  value: string;
-  label: string;
-};
-
 export type SanityImage = {
   alt?: string;
   asset?: {
@@ -172,7 +167,6 @@ export type HomePage = PageDocument & {
     image?: SanityImage;
     primaryButton?: ButtonLink;
     secondaryButton?: ButtonLink;
-    stats?: StatItem[];
   };
   services?: {
     badge?: string;
@@ -229,7 +223,6 @@ export type ProjectsPage = PageDocument & {
 
 export type AboutPage = PageDocument & {
   hero: PageHero;
-  stats?: StatItem[];
   missionVision?: TextSectionCard[];
   values?: {
     badge?: string;

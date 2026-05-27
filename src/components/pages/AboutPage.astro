@@ -51,20 +51,6 @@ const journeyHtml = renderPortableText(page.timeline?.content);
     </div>
   </section>
 
-  <!-- ===================== STATS BAND ===================== -->
-  <section class="site-about-stats site-bg-dark">
-    <div class="site-container">
-      <div class="site-stats-band site-reveal">
-        {(page.stats ?? []).map((stat) => (
-          <div class="site-stat">
-            <span class="site-stat-num">{stat.value}</span>
-            <span class="site-stat-label">{stat.label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- ===================== MISSION / VISION ===================== -->
   <section class="site-section site-bg-cream site-texture">
     <div class="site-container">
@@ -159,21 +145,6 @@ const journeyHtml = renderPortableText(page.timeline?.content);
     overflow: hidden;
     aspect-ratio: 4 / 3;
     border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  /* ===================== STATS ===================== */
-  .site-about-stats {
-    padding: 0 1.5rem 3rem;
-  }
-
-  .site-about-stats .site-stats-band {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--site-radius-lg);
-  }
-
-  @media (min-width: 768px) {
-    .site-about-stats { padding: 0 2rem 4rem; }
   }
 
   /* ===================== MISSION / VISION ===================== */

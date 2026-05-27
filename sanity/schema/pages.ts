@@ -23,7 +23,6 @@ export const pageTypes = [
           defineField({ name: "image", title: "Image", type: "siteImage" }),
           defineField({ name: "primaryButton", title: "Primary button", type: "buttonLink" }),
           defineField({ name: "secondaryButton", title: "Secondary button", type: "buttonLink" }),
-          defineField({ name: "stats", title: "Stats", type: "array", of: arrayOf("statItem") }),
         ],
       }),
       defineField({
@@ -135,7 +134,6 @@ export const pageTypes = [
     fields: [
       defineField({ name: "seo", title: "SEO", type: "seo", validation: (Rule) => Rule.required() }),
       defineField({ name: "hero", title: "Hero", type: "pageHero", validation: (Rule) => Rule.required() }),
-      defineField({ name: "stats", title: "Stats", type: "array", of: arrayOf("statItem") }),
       defineField({ name: "missionVision", title: "Mission and Vision", type: "array", of: arrayOf("textSectionCard") }),
       defineField({
         name: "values",
