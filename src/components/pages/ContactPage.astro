@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ContactForm from '../ContactForm';
 import { siteIcon } from '../../lib/icons';
 import { cmsImageFallbackSrc, type ContactPage } from '../../lib/sanityPages';
 interface Props {
@@ -55,47 +56,11 @@ const { page, visualEditing = false } = Astro.props;
           <h2 class="site-form-heading">{page.form?.heading}</h2>
           {page.form?.subheading && <p class="site-form-subhead">{page.form.subheading}</p>}
 
-          <form class="site-form" action="#" method="post">
-            <div class="site-form-row">
-              <div class="site-form-group">
-                <label for="firstName" class="site-form-label">First Name</label>
-                <input type="text" id="firstName" name="firstName" required class="site-form-input" placeholder="John" />
-              </div>
-              <div class="site-form-group">
-                <label for="lastName" class="site-form-label">Last Name</label>
-                <input type="text" id="lastName" name="lastName" required class="site-form-input" placeholder="Doe" />
-              </div>
-            </div>
-
-            <div class="site-form-group">
-              <label for="email" class="site-form-label">Email</label>
-              <input type="email" id="email" name="email" required class="site-form-input" placeholder="john@example.com" />
-            </div>
-
-            <div class="site-form-group">
-              <label for="phone" class="site-form-label">Phone</label>
-              <input type="tel" id="phone" name="phone" class="site-form-input" placeholder="(555) 123-4567" />
-            </div>
-
-            <div class="site-form-group">
-              <label for="projectType" class="site-form-label">Project Type</label>
-              <select id="projectType" name="projectType" required class="site-form-input site-form-select">
-                <option value="" disabled selected>Select a project type</option>
-                {(page.form?.projectTypes ?? []).map((option) => (
-                  <option value={option.value}>{option.label}</option>
-                ))}
-              </select>
-            </div>
-
-            <div class="site-form-group">
-              <label for="message" class="site-form-label">Tell us about your project</label>
-              <textarea id="message" name="message" rows="5" required class="site-form-input site-form-textarea" placeholder="Describe your project, timeline, budget range, and any other details..."></textarea>
-            </div>
-
-            <button type="submit" class="site-btn site-btn-primary" style="width: 100%;">
-              {page.form?.submitLabel}
-            </button>
-          </form>
+          <ContactForm
+            projectTypes={page.form?.projectTypes ?? []}
+            submitLabel={page.form?.submitLabel ?? 'Send Message'}
+            client:load
+          />
         </div>
 
         <!-- Info sidebar -->
@@ -131,7 +96,7 @@ const { page, visualEditing = false } = Astro.props;
   </section>
 </Layout>
 
-<style>
+<style is:global>
   /* ===================== CONTACT GRID ===================== */
   .site-contact-grid {
     display: grid;
