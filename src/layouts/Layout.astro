@@ -2,6 +2,7 @@
 import { ClientRouter, fade } from 'astro:transitions';
 import { VisualEditing } from '@sanity/astro/visual-editing';
 import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import { toVisualEditingHref } from '../lib/previewRoutes';
 import { defaultSiteSettings, getSiteSettings } from '../lib/sanityPages';
 import '../styles/global.css';
@@ -148,6 +149,7 @@ function pageForHref(href: string): string | undefined {
 
     <VisualEditing enabled={visualEditing} zIndex={10000} />
     <Analytics />
+    <SpeedInsights />
 
     <!-- Footer -->
     <footer class="site-footer" transition:animate="none">
