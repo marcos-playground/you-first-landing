@@ -162,13 +162,6 @@ function renderConfirmationEmail({
       <p style="margin: 0 0 24px; color: ${brand.charcoalLight}; font-size: 16px; line-height: 1.7;">
         You can expect a response within 1-2 business days. If anything urgent changes in the meantime, simply reply to this email.
       </p>
-      <table role="presentation" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
-        <tr>
-          <td style="background: ${brand.ember}; padding: 13px 18px;">
-            <span style="color: ${brand.white}; font-size: 14px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase;">We are on it</span>
-          </td>
-        </tr>
-      </table>
     `,
   });
 }
@@ -200,12 +193,6 @@ export const POST: APIRoute = async ({ request }) => {
   const resendApiKey = import.meta.env.RESEND_API_KEY;
   const toEmail = import.meta.env.CONTACT_TO_EMAIL;
   const fromEmail = import.meta.env.CONTACT_FROM_EMAIL;
-  console.log("Contact form submission received", {
-    submission,
-    resendApiKey: !!resendApiKey,
-    toEmail: !!toEmail,
-    fromEmail: !!fromEmail,
-  });
 
   if (!resendApiKey || !toEmail || !fromEmail) {
     return jsonResponse({ success: false, error: "Contact email configuration is missing." }, 500);
